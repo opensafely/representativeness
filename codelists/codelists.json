@@ -29,6 +29,12 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/nhs-england-care-homes-residential-status/3712ef13/",
       "downloaded_at": "2021-05-10 16:07:53.643159Z",
       "sha": "357b2af4841e574f7d43bfeff143b39cdfed6997"
+    },
+    "user-anna-schultze-cancer.csv": {
+      "id": "user/anna-schultze/cancer/27f4f62d",
+      "url": "https://codelists.opensafely.org/codelist/user/anna-schultze/cancer/27f4f62d/",
+      "downloaded_at": "2021-09-22 10:58:34.003395Z",
+      "sha": "d67366767153ca644159a1b322aaf379845e55fe"
     }
   }
 }

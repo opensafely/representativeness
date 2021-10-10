@@ -3,14 +3,13 @@
 library('tidyverse')
 library('sf')
 
+dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE)
 dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
 dir.create(here::here("output", "tables"), showWarnings = FALSE, recursive=TRUE)
-dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE)
-
 
 ## import data
 df_input <- read_csv(
-  here::here("output", "cohorts", "input_1_stppop_map.csv"),
+  here::here("output", "cohorts", "input_1_stppop_map.csv.gz"),
   col_types = cols(
     patient_id = col_integer(),
     stp = col_character()

@@ -3,6 +3,10 @@
 library('tidyverse')
 library('sf')
 
+dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
+dir.create(here::here("output", "tables"), showWarnings = FALSE, recursive=TRUE)
+dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE)
+
 
 ## import data
 df_input <- read_csv(

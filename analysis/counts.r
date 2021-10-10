@@ -14,6 +14,10 @@
 library('tidyverse')
 library('sf')
 
+dir.create(here::here("output", "tables"), showWarnings = FALSE, recursive=TRUE)
+dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE)
+
+
 # # import data
 df_input <- read_csv("./output/cohorts/input_1_stppop_map.csv.gz",
                      col_types = cols(

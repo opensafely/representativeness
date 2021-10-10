@@ -20,6 +20,8 @@ library(data.table)
 library(dtplyr)
 
 dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
+dir.create(here::here("output", "tables"), showWarnings = FALSE, recursive=TRUE)
+dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE)
 
 
 theme_set(theme_minimal())

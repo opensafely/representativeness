@@ -18,3 +18,33 @@ actions:
       moderately_sensitive:
         figure1: output/plots/plot_stppop_bar_names.png
         figure2: output/plots/plot_stppop_map.png
+
+  counts:
+    run: r:latest analysis/counts.r
+    needs: [generate_cohort_stppop_map]
+    outputs:
+      moderately_sensitive:
+        death_count: output/tables/death_count.csv
+        imd_table: output/tables/imd_count.csv
+        age_sex_table: output/tables/age_sex_count.csv
+        age_table: output/tables/age_count.csv
+
+  plots:
+    run: r:latest analysis/plots.R
+    needs: [counts]
+    outputs:
+      moderately_sensitive:
+        figure1: output/plots/Cause_of_Death.svg
+        figure2: output/plots/imd_count.svg
+        figure3: output/plots/age_sex.svg
+        figure4: output/plots/age.svg
+
+
+  calculate_tpp_coverage:
+    run: r:latest analysis/calculate_tpp_coverage.R
+    needs: [generate_cohort_stppop_map]
+    outputs:
+      moderately_sensitive:
+        msoa_map: output/plots/tpp_coverage_map.svg
+
+

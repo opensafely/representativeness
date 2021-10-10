@@ -3,6 +3,14 @@ from codelists import *
 from config import index_date
 
 demographic_variables = dict(
+    age=patients.age_as_of(
+        index_date,
+        return_expectations={
+            "rate" : "universal",
+            "int" : {"distribution" : "population_ages"}
+        }
+    ),
+
     age_group=patients.categorised_as(
         {
             "0-4": "age < 5",
@@ -52,7 +60,6 @@ demographic_variables = dict(
                 }
             },
         },
-        age=patients.age_as_of(index_date),
     ),
 
     sex=patients.sex(

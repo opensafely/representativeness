@@ -30,6 +30,19 @@ study = StudyDefinition(
             "category": {"ratios": dict_stp},
         },
     ),
+
+    msoa=patients.address_as_of(
+        "2020-02-01",
+        returning="msoa",
+        return_expectations={
+            "rate": "universal",
+            "category": {"ratios": {"E02000001": 0.0625, "E02000002": 0.0625, "E02000003": 0.0625, "E02000004": 0.0625,
+                                    "E02000005": 0.0625, "E02000007": 0.0625, "E02000008": 0.0625, "E02000009": 0.0625, 
+                                    "E02000010": 0.0625, "E02000011": 0.0625, "E02000012": 0.0625, "E02000013": 0.0625, 
+                                    "E02000014": 0.0625, "E02000015": 0.0625, "E02000016": 0.0625, "E02000017": 0.0625}},
+        },
+    ),   
+
     nuts1=patients.registered_practice_as_of(
         "index_date",
         returning="nuts1_region_name",
@@ -61,7 +74,7 @@ study = StudyDefinition(
 
     died_any=patients.died_from_any_cause(
         between=["2020-01-01","2020-12-31"],
-        returning="date_of_death",
+        returning="binary_flag",
         date_format="YYYY-MM-DD",
         return_expectations={
             "date": {"earliest" : "2020-01-01"},
@@ -72,7 +85,7 @@ study = StudyDefinition(
     died_cause_ons=patients.died_from_any_cause(
         between=["2020-01-01","2020-12-31"],
         returning="underlying_cause_of_death",
-        return_expectations={"category": {"ratios": {"U071":0.2, "I21":0.2, "C34":0.1, "C83":0.1 , "J09":0.05 , "J45.1":0.05 ,"G30":0.05, "A01.2":0.25}},},
+        return_expectations={"category": {"ratios": {"U071":0.2, "C15":0.2, "C16":0.1, "C18":0.1 , "F01":0.05 , "K25.1":0.05 ,"J40":0.05, "E10.2":0.25}},},
     ),
 
     died_ons_covid_flag_any=patients.with_these_codes_on_death_certificate(

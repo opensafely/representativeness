@@ -13,6 +13,8 @@ library(data.table)
 library(dtplyr)
 library(scales)
 
+dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
+
 #death<-read_csv("./output/tables/death_count.csv") 
 death<-read_csv(here::here("output", "tables","death_count.csv.gz"))
 

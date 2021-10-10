@@ -19,6 +19,9 @@ library(sf)
 library(data.table)
 library(dtplyr)
 
+dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
+
+
 theme_set(theme_minimal())
 options(datatable.old.fread.datetime.character = TRUE)
 

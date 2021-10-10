@@ -104,12 +104,15 @@ msoa_shp <- readRDS(args[3])
 #----------------------#
 
 
-svg(here::here("output", "plots","tpp_coverage_map.svg"))
-msoa_shp %>%
+
+plot<-msoa_shp %>%
   filter(grepl("E",MSOA11CD)) %>%
   full_join(tpp_cov, by = c("MSOA11CD" = "msoa")) %>%
   ggplot(aes(geometry = geometry, fill = tpp_cov_all)) +
   geom_sf(lwd = 0) +
   scale_fill_gradient2(midpoint = 100, high = "steelblue", low = "indianred", mid = "white") +
   theme(legend.position = c(0.2,0.9))
-dev.off()
+  
+  
+  ggsave(filename=here::here("output", "plots","tpp_coverage_map.svg"),plot)
+

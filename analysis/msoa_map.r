@@ -2,7 +2,7 @@ library(tidyverse)
 library(data.table)
 library(dtplyr)
 
-args <- c("input_1_stppop_map.csv", "data/msoa_shp.rds")
+args <- c("input_1_stppop_map.csv.gz", "data/msoa_shp.rds")
 
 ## Load shapefiles
 msoa_shp <- readRDS(args[2])

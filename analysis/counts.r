@@ -15,7 +15,7 @@ library('tidyverse')
 library('sf')
 
 # # import data
-df_input <- read_csv("./output/cohorts/input_1_stppop_map.csv",
+df_input <- read_csv("./output/cohorts/input_1_stppop_map.csv.gz",
                      col_types = cols(
                             patient_id = col_integer(),
                             stp = col_character()
@@ -91,7 +91,7 @@ mutate(Percentage = round((Count/total),4)*100,Cohort="TPP")  %>%
   bind_rows(death_ons)
 
 
-write_csv(deaths,here::here("output", "tables","death_count.csv"))  ####add .gz to the end
+write_csv(deaths,here::here("output", "tables","death_count.csv.gz"))  ####add .gz to the end
 
 
 ############################# imd ###################################################
@@ -125,7 +125,7 @@ imd<-imd_sex%>%
   ungroup() %>% arrange(cohort,sex,imd) %>%
   mutate(imd = case_when(imd==1~"1: Most deprived",imd==2~"2",imd==3~"3",imd==4~"4",imd==0~"Unknown",imd==5~"5: Least deprived"))
 
-write_csv(imd,here::here("output", "tables","imd_count.csv"))  ####add .gz to the end
+write_csv(imd,here::here("output", "tables","imd_count.csv.gz"))  ####add .gz to the end
 
 ############################################## age
 
@@ -171,7 +171,7 @@ age_sex<- age_sex_tpp %>%
   mutate(Percentage=case_when(sex=="Males"~(-Percentage),sex=="Females"~Percentage))
   
 
-write_csv(age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the end
+write_csv(age_sex,here::here("output", "tables","age_sex_count.csv.gz"))  ####add .gz to the end
 
 
 age<-  age_sex_tpp %>%
@@ -181,4 +181,4 @@ age<-  age_sex_tpp %>%
   mutate(Percentage = round((n/sum(n)),4)*100) %>%
   ungroup() %>% arrange(cohort,age)
 
-write_csv(age,here::here("output", "tables","age_count.csv"))  ####add .gz to the end
+write_csv(age,here::here("output", "tables","age_count.csv.gz"))  ####add .gz to the end

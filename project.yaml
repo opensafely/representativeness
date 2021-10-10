@@ -6,10 +6,10 @@ expectations:
 actions:
 
   generate_cohort_stppop_map:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_1_stppop_map --output-dir=output/cohorts
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_1_stppop_map --output-dir=output/cohorts --output-format=csv.gz
     outputs:
       highly_sensitive:
-        cohort: output/cohorts/input_1_stppop_map.csv
+        cohort: output/cohorts/input_1_stppop_map.csv.gz
 
   plot_stppop_map:
     run: r:latest analysis/1-plot-stppop_map.R
@@ -24,10 +24,10 @@ actions:
     needs: [generate_cohort_stppop_map]
     outputs:
       moderately_sensitive:
-        death_count: output/tables/death_count.csv
-        imd_table: output/tables/imd_count.csv
-        age_sex_table: output/tables/age_sex_count.csv
-        age_table: output/tables/age_count.csv
+        death_count: output/tables/death_count.csv.gz
+        imd_table: output/tables/imd_count.csv.gz
+        age_sex_table: output/tables/age_sex_count.csv.gz
+        age_table: output/tables/age_count.csv.gz
 
   plots:
     run: r:latest analysis/plots.R

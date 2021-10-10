@@ -14,7 +14,7 @@ library(dtplyr)
 library(scales)
 
 #death<-read_csv("./output/tables/death_count.csv") 
-death<-read_csv(here::here("output", "tables","death_count.csv"))
+death<-read_csv(here::here("output", "tables","death_count.csv.gz"))
 
 
 svg(here::here("output", "plots","Cause_of_Death.svg"))
@@ -25,7 +25,7 @@ dev.off()
 
 
 ##################################### imd
-imd<-read_csv(here::here("output", "tables","imd_count.csv"))
+imd<-read_csv(here::here("output", "tables","imd_count.csv.gz"))
 
 svg(here::here("output", "plots","imd_count.svg"))
 imd %>% filter(sex=="Total") %>%
@@ -36,7 +36,7 @@ dev.off
 
 
 ################################################ age
-age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv"))
+age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv.gz"))
 
 svg(here::here("output", "plots","age_sex.svg"))
  age_sex %>%
@@ -48,7 +48,7 @@ svg(here::here("output", "plots","age_sex.svg"))
    theme_bw() + theme(text = element_text(size=8))
  dev.off()
  
- age<-read_csv(here::here("output", "tables","age_count.csv"))
+ age<-read_csv(here::here("output", "tables","age_count.csv.gz"))
  
  svg(here::here("output", "plots","age.svg"))
  age %>%

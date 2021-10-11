@@ -5,16 +5,38 @@ expectations:
 
 actions:
 
-  generate_cohort_stppop_map:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_1_stppop_map --output-dir=output/cohorts
+  generate_cohort:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --output-dir=output/cohorts --output-format=csv.gz
     outputs:
       highly_sensitive:
-        cohort: output/cohorts/input_1_stppop_map.csv
+        cohort: output/cohorts/input.csv.gz
 
-  plot_stppop_map:
-    run: r:latest analysis/1-plot-stppop_map.R
-    needs: [generate_cohort_stppop_map]
+  counts:
+    run: r:latest analysis/counts.r
+    needs: [generate_cohort]
     outputs:
       moderately_sensitive:
-        figure1: output/plots/plot_stppop_bar_names.png
-        figure2: output/plots/plot_stppop_map.png
+        death_count: output/tables/death_count.csv.gz
+        imd_table: output/tables/imd_count.csv.gz
+        age_sex_table: output/tables/age_sex_count.csv.gz
+        age_table: output/tables/age_count.csv.gz
+
+  plots:
+    run: r:latest analysis/plots.R
+    needs: [counts]
+    outputs:
+      moderately_sensitive:
+        figure1: output/plots/Cause_of_Death.svg
+        figure2: output/plots/imd_count.svg
+        figure3: output/plots/age_sex_count.svg
+        figure4: output/plots/age_count.svg
+
+
+  calculate_tpp_coverage:
+    run: r:latest analysis/calculate_tpp_coverage.R
+    needs: [generate_cohort]
+    outputs:
+      moderately_sensitive:
+        msoa_map: output/plots/tpp_coverage_map.svg
+
+

@@ -1,0 +1,38 @@
+"Mortality statistics - underlying cause, sex and age",
+ONS Crown Copyright Reserved [from Nomis on 6 October 2021],
+Analysis   :,standard
+Area Type  :,countries
+Area Name  :,England
+Gender     :,Total
+Age        :,total (all ages)
+measure    :,Deaths
+,
+cause of death,2020
+,
+"A00-R99,U00-Y89 All causes, all ages",569700
+C15 Malignant neoplasm of oesophagus,6500
+C16 Malignant neoplasm of stomach,3178
+C18 Malignant neoplasm of colon,8037
+"C19-C21 Malignant neoplasm of rectosigmoid junction, rectum and anus",6362
+C25 Malignant neoplasm of pancreas,8298
+"C33-C34 Malignant neoplasm of trachea, bronchus and lung",26936
+C43 Malignant melanoma of skin,2007
+C44 Other malignant neoplasms of skin,794
+C50 Malignant neoplasm of breast,9733
+C53 Malignant neoplasm of cervix uteri,702
+C61 Malignant neoplasm of prostate,10268
+C67 Malignant neoplasm of bladder,4754
+C91-C95 Leukaemia,3854
+E10-E14 Diabetes mellitus,7014
+F01-F03 Dementias,43489
+G30 Alzheimer disease,22644
+I20-I25 Ischaemic heart diseases,52066
+I60-I69 Cerebrovascular diseases,27747
+J12-J18 Pneumonia,18184
+"J40-J44 Bronchitis, emphysema and other chronic obstructive pulmonary disease",23647
+K25-K27 Gastric and duodenal ulcer,1565
+K70-K77 Diseases of liver,9002
+V01-V89 Land transport accidents,1100
+X60-X84 Intentional self-harm,4379
+Y10-Y34 Event of undetermined intent,539
+U07 Emergency use of U07,69300

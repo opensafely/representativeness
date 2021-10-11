@@ -19,7 +19,7 @@ dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE
 
 
 # # import data
-df_input <- read_csv("./output/cohorts/input_1_stppop_map.csv.gz",
+df_input <- read_csv("./output/cohorts/input.csv.gz",
                      col_types = cols(
                             patient_id = col_integer(),
                             stp = col_character()

@@ -2,11 +2,9 @@
 
 # cohort extractor
 from cohortextractor import StudyDefinition, patients
-# dictionary of STP codes (for dummy data)
-from dictionaries import dict_stp
 from codelists import *
 from common_variables import demographic_variables
-from config import index_date
+from config import *
 # set the index date
 # STUDY POPULATION
 
@@ -22,17 +20,9 @@ study = StudyDefinition(
     },
     # This line defines the study population
     population=patients.registered_as_of(index_date),
-    # this line defines the stp variable we want to extract
-    stp=patients.registered_practice_as_of(
-        "index_date",
-        returning="stp_code",
-        return_expectations={
-            "category": {"ratios": dict_stp},
-        },
-    ),
 
     msoa=patients.address_as_of(
-        "2020-02-01",
+        index_date,
         returning="msoa",
         return_expectations={
             "rate": "universal",
@@ -73,40 +63,29 @@ study = StudyDefinition(
     ),
 
     died_any=patients.died_from_any_cause(
-        between=["2020-01-01","2020-12-31"],
+        between=[index_date,end_date],
         returning="binary_flag",
         date_format="YYYY-MM-DD",
         return_expectations={
-            "date": {"earliest" : "2020-01-01"},
+            "date": {"earliest" : index_date},
             "rate" : "exponential_increase"
         },
     ),
 
     died_cause_ons=patients.died_from_any_cause(
-        between=["2020-01-01","2020-12-31"],
+        between=[index_date,end_date],
         returning="underlying_cause_of_death",
         return_expectations={"category": {"ratios": {"U071":0.2, "C15":0.2, "C16":0.1, "C18":0.1 , "F01":0.05 , "K25.1":0.05 ,"J40":0.05, "E10.2":0.25}},},
     ),
 
     died_ons_covid_flag_any=patients.with_these_codes_on_death_certificate(
         covid_codelist,
-        between=["2020-01-01","2020-12-31"],
+        between=[index_date,end_date],
         match_only_underlying_cause=True,
         return_expectations={
             "date": {"earliest" : "2020-01-01"},
             "rate" : "exponential_increase"
         },
     ),
-
-    died_ons_cancer_flag_any=patients.with_these_codes_on_death_certificate(
-        cancer_death_codelist,
-        between=["2020-01-01","2020-12-31"],
-        match_only_underlying_cause=True,
-        return_expectations={
-            "date": {"earliest" : "2020-01-01"},
-            "rate" : "exponential_increase"
-        },
-    ),
-    
     **demographic_variables,
 )

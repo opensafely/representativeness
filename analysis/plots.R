@@ -39,7 +39,9 @@ age_sex_plot<- age_sex %>%
  ggplot(aes(x = age, y = n, fill = sex,alpha=cohort)) + 
    geom_bar(stat = "identity",colour="grey3") + geom_bar(data=age_sex[age_sex$cohort=="TPP",], aes(x = age, y = n, fill = sex,alpha=cohort),stat = "identity",colour="white") +
    coord_flip() +
-   scale_fill_brewer(palette = "Set1") +scale_alpha_discrete(range=c(0.3,0.7))+ scale_y_continuous(labels=comma)+
+   scale_fill_brewer(palette = "Set1") +scale_alpha_discrete(range=c(0.3,0.7))+ 
+   scale_y_continuous(breaks = seq(-400000, 400000, 100000), 
+                      labels = comma(c(seq(400000,0,-100000), seq(100000,400000,100000)))) + 
    theme_bw() + theme(text = element_text(size=8))
 ggsave(filename=here::here("output", "plots","age_sex_count.svg"),age_sex_plot)
 

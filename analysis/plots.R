@@ -12,6 +12,9 @@ library(tidyverse)
 library(scales)
 library(readr)
 
+agelevels<-readRDS(here::here("output", "tables","levels.RData"))
+
+
 dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
 
  
@@ -20,7 +23,7 @@ death<-read_csv(here::here("output", "tables","death_count.csv.gz"))
 death_plot<-death %>%
 ggplot(aes(x=Cause_of_Death, y=Percentage, fill=Cohort)) +geom_bar(stat = "identity",position = "dodge") +
   theme_classic() + theme(axis.text.x = element_text( hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all deaths")
-ggsave(filename=here::here("output", "plots","Cause_of_Death.svg"),death_plot,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","Cause_of_Death_count.svg"),death_plot,width = 30, height = 30, units = "cm")
 
 ##################################### imd
 imd<-read_csv(here::here("output", "tables","imd_count.csv.gz"))
@@ -32,7 +35,7 @@ ggsave(filename=here::here("output", "plots","imd_count.svg"),imd_plot)
 
 ################################################ age
 age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv.gz"),
-                  col_types = cols(age =  readr::col_factor(levels=NULL)))
+                  col_types = cols(age =  readr::col_factor(levels=agelevels)))
 
 
 age_sex<- age_sex %>%
@@ -52,7 +55,7 @@ ggsave(filename=here::here("output", "plots","age_sex_count.svg"),age_sex_plot,w
 
  
  age<-read_csv(here::here("output", "tables","age_count.csv.gz"),col_types = cols(
-    age =  readr::col_factor(levels=NULL)))
+    age =  readr::col_factor(levels=agelevels)))
  
  
  age_plot <-age %>%

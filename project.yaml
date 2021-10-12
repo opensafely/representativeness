@@ -20,7 +20,7 @@ actions:
         imd_table: output/tables/imd_count.csv.gz
         age_sex_table: output/tables/age_sex_count.csv.gz
         age_table: output/tables/age_count.csv.gz
-        levels: output/tables/levels.RData"
+        levels: output/tables/levels.RData
 
   plots:
     run: r:latest analysis/plots.R

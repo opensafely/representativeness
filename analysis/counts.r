@@ -59,7 +59,7 @@ TPP_death <- df_input %>%
       cause == "C25" ~ "Malignant neoplasm of pancreas",
       cause >= "C33" & cause <="C34" ~ "Malignant neoplasm of trachea, bronchus and lung",
       cause == "C43" ~ "Malignant melanoma of the skin",
-      cause == "C44" ~ "Other malignant neoplasm of the skin",
+      cause == "C44" ~ "Other malignant neoplasms of skin",
       cause == "C50" ~ "Malignant neoplasm of breast",
       cause == "C53" ~ "Malignant neoplasm of cervix uteri",
       cause == "C61" ~ "Malignant neoplasm of prostate",

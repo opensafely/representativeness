@@ -40,7 +40,7 @@ age_sex<- age_sex %>%
    drop_na(n)
 
 age_sex_plot<-age_sex %>%
-   filter(cohort=="tpp") %>%
+   filter(cohort=="ONS") %>%
  ggplot(aes(x = age, y = n, fill = sex,alpha=cohort)) + 
    geom_bar(stat = "identity",colour="grey3") + geom_bar(data=age_sex[age_sex$cohort=="TPP",], aes(x = age, y = n, fill = sex,alpha=cohort),stat = "identity",colour="white") +
    coord_flip() +

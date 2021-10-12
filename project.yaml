@@ -20,13 +20,14 @@ actions:
         imd_table: output/tables/imd_count.csv.gz
         age_sex_table: output/tables/age_sex_count.csv.gz
         age_table: output/tables/age_count.csv.gz
+        levels: output/tables/levels.RData
 
   plots:
     run: r:latest analysis/plots.R
     needs: [counts]
     outputs:
       moderately_sensitive:
-        figure1: output/plots/Cause_of_Death.svg
+        figure1: output/plots/Cause_of_Death_count.svg
         figure2: output/plots/imd_count.svg
         figure3: output/plots/age_sex_count.svg
         figure4: output/plots/age_count.svg

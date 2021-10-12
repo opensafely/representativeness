@@ -169,9 +169,9 @@ age_sex<- age_sex_tpp %>%
   mutate(age=factor(age,levels=levels(age_sex_tpp$age))) %>%
   arrange(cohort,age)
   
-
+agelevels<-levels(age_sex_tpp$age)
 write_csv(age_sex,here::here("output", "tables","age_sex_count.csv.gz"))  ####add .gz to the end
-
+saveRDS(agelevels, here::here("output", "tables","levels.RData"))
 
 age<-  age_sex %>%
   group_by(cohort,age) %>%

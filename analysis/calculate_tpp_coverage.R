@@ -116,7 +116,7 @@ coverage_plot<-msoa_shp %>%
   full_join(tpp_cov, by = c("MSOA11CD" = "msoa")) %>%
   ggplot(aes(geometry = geometry, fill = tpp_cov_all)) +
   geom_sf(lwd = 0, colour='grey') +
-  scale_fill_gradient2(midpoint = 100, high = "black", mid = "indianred", low = "white") +
+  scale_fill_gradient2(midpoint = 100, high = "navyblue", mid = "indianred", low = "ivory1",na.value = "white") +
   theme(legend.position = c(0.2,0.9),panel.background=element_rect(fill="lightblue"))
   
   

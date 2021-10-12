@@ -93,7 +93,7 @@ summary(tpp_cov)
 #   Save    #
 #------------------------------------------#
 
-write_csv(tpp_cov, here::here("output", "cohorts","tpp_pop_all.csv.gz"))
+write_csv(tpp_cov, here::here("output", "tables","tpp_pop_all.csv.gz"))
 
 ################################################################################
 

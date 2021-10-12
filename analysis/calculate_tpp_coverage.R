@@ -93,7 +93,7 @@ summary(tpp_cov)
 #   Save    #
 #------------------------------------------#
 
-saveRDS(tpp_cov, here::here("output", "cohorts","tpp_pop_all.rds"))
+write_csv(tpp_cov, here::here("output", "cohorts","tpp_pop_all.csv.gz"))
 
 ################################################################################
 

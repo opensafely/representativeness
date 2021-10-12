@@ -15,16 +15,10 @@ library('tidyverse')
 library('sf')
 
 dir.create(here::here("output", "tables"), showWarnings = FALSE, recursive=TRUE)
-dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE)
-
 
 # # import data
-df_input <- read_csv("./output/cohorts/input.csv.gz",
-                     col_types = cols(
-                            patient_id = col_integer(),
-                            stp = col_character()
-                          )) %>%
-  mutate(sex = case_when(sex=="F"~"Females",sex=="M"~"Males"))
+df_input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
+  mutate(sex = case_when(sex=="F"~"Females",sex=="M"~"Males",sex=="I"~"I",sex=="U"~"Unknown"))
 
 
 
@@ -83,7 +77,8 @@ TPP_death <- df_input %>%
       cause >= "V01" & cause <="V89" ~ "Land transport accidents",
       cause >= "X60" & cause <="X84" ~ "Intentional self-harm",
       cause >= "Y10" & cause <="Y34" ~ "Intentional self-harm",
-      cause == "U07" |cause == "U10.9" ~ "COVID-19"))
+      cause == "U07" |cause == "U10.9" ~ "COVID-19")) %>%
+      drop_na(Cause_of_Death)
   
 ###### combine TPP and ONS data
 deaths <- TPP_death %>% 
@@ -93,7 +88,6 @@ summarise(Count = n(),total=mean(total)) %>%
 mutate(Percentage = round((Count/total),4)*100,Cohort="TPP")  %>% 
   select(-total) %>%
   bind_rows(death_ons)
-
 
 write_csv(deaths,here::here("output", "tables","death_count.csv.gz"))  ####add .gz to the end
 
@@ -172,17 +166,20 @@ age_sex<- age_sex_tpp %>%
   group_by(cohort,sex) %>%
   mutate(Percentage = round((n/sum(n)),4)*100) %>%
   ungroup() %>%
-  mutate(Percentage=case_when(sex=="Males"~(-Percentage),sex=="Females"~Percentage))
+  mutate(Percentage=case_when(sex=="Males"~(-Percentage),sex=="Females"~Percentage))%>%
+  mutate(age=factor(age,levels=levels(age_sex_tpp$age))) %>%
+  arrange(cohort,age)
   
 
 write_csv(age_sex,here::here("output", "tables","age_sex_count.csv.gz"))  ####add .gz to the end
 
 
-age<-  age_sex_tpp %>%
-  bind_rows(age_ons)%>%
+age<-  age_sex %>%
   group_by(cohort,age) %>%
-  summarise(n = sum(sqrt(n^2)))%>%
+  summarise(n = sum(abs(n)))%>%
   mutate(Percentage = round((n/sum(n)),4)*100) %>%
-  ungroup() %>% arrange(cohort,age)
+  ungroup() %>% 
+  mutate(age=factor(age,levels=levels(age_sex_tpp$age)))%>%
+  arrange(cohort,age)
 
-write_csv(age,here::here("output", "tables","age_count.csv.gz"))  ####add .gz to the end
+write_csv(age,here::here("output", "tables","age_count.csv.gz"))

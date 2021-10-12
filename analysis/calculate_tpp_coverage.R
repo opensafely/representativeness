@@ -115,7 +115,7 @@ plot<-msoa_shp %>%
   full_join(tpp_cov, by = c("MSOA11CD" = "msoa")) %>%
   ggplot(aes(geometry = geometry, fill = tpp_cov_all)) +
   geom_sf(lwd = 0) +
-  scale_fill_gradient2(midpoint = 100, high = "steelblue", low = "indianred", mid = "white") +
+  scale_fill_gradient2(midpoint = 100, high = "steelblue", mid = "indianred", low = "white") +
   theme(legend.position = c(0.2,0.9))
   
   

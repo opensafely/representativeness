@@ -142,7 +142,7 @@ age_ons_sex<-read_csv("./data/ukpopestimatesmid2020_male.csv",skip = 7) %>%
   gather(variable, value, -rowname) %>% 
   spread(rowname, value) %>%  rename("age"=1,"n"=2) %>%
   mutate(cohort="ONS") %>% filter(age!="All ages") %>%
-  mutate(age=as.factor(age)) %>% mutate(n=-1*n,sex="Males")
+  mutate(age=as.factor(age)) %>% mutate(sex="Males")
 
 age_ons_female<-read_csv("./data/ukpopestimatesmid2020_female.csv",skip = 7) %>%
   filter(Name=="ENGLAND") %>% select(-starts_with("x"),-Code,-Name,-Geography) %>%
@@ -159,15 +159,13 @@ age_sex_tpp <- df_input %>%
   arrange(age) %>%
   mutate(age=as.factor(age)) %>% mutate(age= fct_recode(age,'90+'="90")) %>%
   group_by(age,sex) %>% summarise(n = n()) %>%
-  mutate(cohort="TPP") %>% mutate(n=case_when(sex=="Males"~(-n),sex=="Females"~n)) %>%
-  drop_na(sex)
+  mutate(cohort="TPP") 
          
 age_sex<- age_sex_tpp %>%        
   bind_rows(age_ons_sex)%>%
   group_by(cohort,sex) %>%
   mutate(Percentage = round((n/sum(n)),4)*100) %>%
   ungroup() %>%
-  mutate(Percentage=case_when(sex=="Males"~(-Percentage),sex=="Females"~Percentage))%>%
   mutate(age=factor(age,levels=levels(age_sex_tpp$age))) %>%
   arrange(cohort,age)
   

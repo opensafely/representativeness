@@ -65,7 +65,7 @@ demographic_variables = dict(
     sex=patients.sex(
         return_expectations={
             "rate": "universal",
-            "category": {"ratios": {"M": 0.49, "F": 0.51}},
+            "category": {"ratios": {"M": 0.48, "F": 0.50,"U":0.01,"I":0.01}},
         }
     ),
     region=patients.registered_practice_as_of(

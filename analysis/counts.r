@@ -55,7 +55,7 @@ TPP_death <- df_input %>%
       cause == "C15" ~ "Malignant neoplasm of oesophagus",
       cause == "C16" ~ "Malignant neoplasm of stomach",
       cause == "C18" ~ "Malignant neoplasm of colon",
-      cause >= "C19" & cause <="C21" ~ "Malignant neoplasm of Rectosigmoid junction, rectum, and anus",
+      cause >= "C19" & cause <="C21" ~ "Malignant neoplasm of rectosigmoid junction, rectum and anus",
       cause == "C25" ~ "Malignant neoplasm of pancreas",
       cause >= "C33" & cause <="C34" ~ "Malignant neoplasm of trachea, bronchus and lung",
       cause == "C43" ~ "Malignant melanoma of the skin",
@@ -159,7 +159,8 @@ age_sex_tpp <- df_input %>%
   arrange(age) %>%
   mutate(age=as.factor(age)) %>% mutate(age= fct_recode(age,'90+'="90")) %>%
   group_by(age,sex) %>% summarise(n = n()) %>%
-  mutate(cohort="TPP") %>% mutate(n=case_when(sex=="Males"~(-n),sex=="Females"~n))
+  mutate(cohort="TPP") %>% mutate(n=case_when(sex=="Males"~(-n),sex=="Females"~n)) %>%
+  drop_na(sex)
          
 age_sex<- age_sex_tpp %>%        
   bind_rows(age_ons_sex)%>%

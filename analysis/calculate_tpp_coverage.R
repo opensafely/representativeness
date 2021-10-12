@@ -85,6 +85,7 @@ tpp_cov<-input %>%
   mutate(msoa = as.factor(msoa),
          tpp_cov_all = tpp_pop_all*100/msoa_pop)
 
+
 summary(tpp_cov)
 
 # ---------------------------------------------------------------------------- #
@@ -113,9 +114,9 @@ msoa_shp <- readRDS(args[3])
 plot<-msoa_shp %>%
   filter(grepl("E",MSOA11CD)) %>%
   full_join(tpp_cov, by = c("MSOA11CD" = "msoa")) %>%
-  ggplot(aes(geometry = geometry, fill = tpp_cov_all)) +
+  ggplot(aes(geometry = geometry, fill = tpp_cov_all),colour="black") +
   geom_sf(lwd = 0) +
-  scale_fill_gradient2(midpoint = 100, high = "steelblue", mid = "indianred", low = "white") +
+  scale_fill_gradient2(midpoint = 100, high = "black", mid = "indianred", low = "white") +
   theme(legend.position = c(0.2,0.9))
   
   

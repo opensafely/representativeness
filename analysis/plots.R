@@ -31,12 +31,16 @@ imd_plot<-imd %>% filter(sex=="Total") %>%
 ggsave(filename=here::here("output", "plots","imd_count.svg"),imd_plot)
 
 ################################################ age
-age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv.gz"),col_types = cols(
-   age =  readr::col_factor(levels=NULL)))
+age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv.gz"),
+                  col_types = cols(age =  readr::col_factor(levels=NULL)))
 
 
-age_sex_plot<- age_sex %>%
-   filter(cohort=="ONS") %>%
+age_sex<- age_sex %>%
+   mutate(n=case_when( sex=="Females"~n,sex=="Males"~(-1*n))) %>%
+   drop_na(n)
+
+age_sex_plot<-age_sex %>%
+   filter(cohort=="tpp") %>%
  ggplot(aes(x = age, y = n, fill = sex,alpha=cohort)) + 
    geom_bar(stat = "identity",colour="grey3") + geom_bar(data=age_sex[age_sex$cohort=="TPP",], aes(x = age, y = n, fill = sex,alpha=cohort),stat = "identity",colour="white") +
    coord_flip() +

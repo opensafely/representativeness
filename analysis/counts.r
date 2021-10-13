@@ -9,6 +9,26 @@
 ################################################################################
 
 
+## Redactor code (W.Hulme)
+redactor <- function(n, threshold=6,e_overwrite=NA_integer_){
+  # given a vector of frequencies, this returns a boolean vector that is TRUE if
+  # a) the frequency is <= the redaction threshold and
+  # b) if the sum of redacted frequencies in a) is still <= the threshold, then the
+  # next largest frequency is also redacted
+  n <- as.integer(n)
+  leq_threshold <- dplyr::between(n, 1, threshold)
+  n_sum <- sum(n)
+  # redact if n is less than or equal to redaction threshold
+  redact <- leq_threshold
+  # also redact next smallest n if sum of redacted n is still less than or equal to threshold
+  if((sum(n*leq_threshold) <= threshold) & any(leq_threshold)){
+    redact[which.min(dplyr::if_else(leq_threshold, n_sum+1L, n))] = TRUE
+  }
+  n_redacted <- if_else(redact, e_overwrite, n)
+}
+print("redactor function")
+
+
 
 ## import libraries
 library('tidyverse')
@@ -89,7 +109,9 @@ mutate(Percentage = round((Count/total),4)*100,Cohort="TPP")  %>%
   select(-total) %>%
   bind_rows(death_ons)
 
-write_csv(deaths,here::here("output", "tables","death_count.csv.gz"))  ####add .gz to the end
+redacted_deaths <- deaths %>% mutate_at(vars(Count),redactor) %>%
+  mutate(Percentage=case_when(!is.na(Count)~Percentage))
+write_csv(redacted_deaths,here::here("output", "tables","death_count.csv.gz"))  ####add .gz to the end
 
 
 ############################# imd ###################################################
@@ -123,7 +145,11 @@ imd<-imd_sex%>%
   ungroup() %>% arrange(cohort,sex,imd) %>%
   mutate(imd = case_when(imd==1~"1: Most deprived",imd==2~"2",imd==3~"3",imd==4~"4",imd==0~"Unknown",imd==5~"5: Least deprived"))
 
-write_csv(imd,here::here("output", "tables","imd_count.csv.gz"))  ####add .gz to the end
+
+redacted_imd <- imd %>% mutate_at(vars(Total),redactor) %>%
+  mutate(Percentage=case_when(!is.na(Total)~Percentage))
+
+write_csv(redacted_imd,here::here("output", "tables","imd_count.csv.gz"))  ####add .gz to the end
 
 ############################################## age
 
@@ -170,7 +196,6 @@ age_sex<- age_sex_tpp %>%
   arrange(cohort,age)
   
 agelevels<-levels(age_sex_tpp$age)
-write_csv(age_sex,here::here("output", "tables","age_sex_count.csv.gz"))  ####add .gz to the end
 saveRDS(agelevels, here::here("output", "tables","levels.RData"))
 
 age<-  age_sex %>%
@@ -181,4 +206,11 @@ age<-  age_sex %>%
   mutate(age=factor(age,levels=levels(age_sex_tpp$age)))%>%
   arrange(cohort,age)
 
-write_csv(age,here::here("output", "tables","age_count.csv.gz"))
+redacted_age <- age %>% mutate_at(vars(n),redactor) %>%
+  mutate(Percentage=case_when(!is.na(n)~Percentage))
+
+write_csv(redacted_age,here::here("output", "tables","age_count.csv.gz"))
+
+redacted_age_sex <- age_sex %>% mutate_at(vars(n),redactor) %>%
+  mutate(Percentage=case_when(!is.na(n)~Percentage))
+write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv.gz"))  ####add .gz to the en

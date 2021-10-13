@@ -61,7 +61,7 @@ ggsave(filename=here::here("output", "plots","age_sex_count.svg"),age_sex_plot,w
  age_plot <-age %>%
    ggplot(aes(x=age, y=Percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
    theme_classic() + theme(axis.text.x = element_text(size=8,angle = 90,hjust=0.95,vjust=0.2)) + 
-    xlab("") + ylab(" % of cohort") + scale_x_discrete() +
+    xlab("") + ylab(" % of cohort") + 
     scale_x_discrete(limits = agelevels)
 ggsave(filename=here::here("output", "plots","age_count.svg"),age_plot,width = 30, height = 15, units = "cm")
 

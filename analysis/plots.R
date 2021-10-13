@@ -50,7 +50,7 @@ age_sex_plot<-age_sex %>%
    scale_fill_brewer(palette = "Set1") +scale_alpha_discrete(range=c(0.3,0.7))+ 
    scale_y_continuous(breaks = seq(-400000, 400000, 100000), 
                       labels = comma(c(seq(400000,0,-100000), seq(100000,400000,100000)))) + 
-   theme_bw() + theme(text = element_text(size=8))
+   theme_bw() + theme(text = element_text(size=8)) + scale_x_discrete(limits = agelevels)
 ggsave(filename=here::here("output", "plots","age_sex_count.svg"),age_sex_plot,width = 30, height = 30, units = "cm")
 
  
@@ -60,7 +60,9 @@ ggsave(filename=here::here("output", "plots","age_sex_count.svg"),age_sex_plot,w
  
  age_plot <-age %>%
    ggplot(aes(x=age, y=Percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
-   theme_classic() + theme(axis.text.x = element_text(size=8,angle = 90,hjust=0.95,vjust=0.2)) + xlab("") + ylab(" % of cohort") + scale_x_discrete()
+   theme_classic() + theme(axis.text.x = element_text(size=8,angle = 90,hjust=0.95,vjust=0.2)) + 
+    xlab("") + ylab(" % of cohort") + scale_x_discrete() +
+    scale_x_discrete(limits = agelevels)
 ggsave(filename=here::here("output", "plots","age_count.svg"),age_plot,width = 30, height = 15, units = "cm")
 
  

@@ -19,9 +19,8 @@ library(sf)
 library(data.table)
 library(dtplyr)
 
-dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
-dir.create(here::here("output", "tables"), showWarnings = FALSE, recursive=TRUE)
-dir.create(here::here("output", "cohorts"), showWarnings = FALSE, recursive=TRUE)
+fs::dir_create(here::here("output", "plots"))
+fs::dir_create(here::here("output", "tables"))
 
 
 theme_set(theme_minimal())
@@ -39,17 +38,16 @@ options(datatable.old.fread.datetime.character = TRUE)
 #   - total population estimates per MSOA
 #   - population estimates by single year age
 # 
- args <- c("./output/cohorts/input.csv.gz","./data/sape23dt4mid2020msoa.csv","./data/msoa_shp.rds")
 
 ## TPP-registered patient records (from study definition)
 ## Include ALL patients with non-missing MSOA in calculation of TPP populations
-input <- read_csv(args[1]) %>%
+input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
   # Remove individuals w missing/non-England MSOA
   filter(grepl("E",msoa) & !is.na(msoa)) %>%
   mutate(`65+` =case_when(age>=65~1) )
 
 ## National MSOA population estimates (ONS mid-2020):
-msoa_pop <- fread(args[2], data.table = FALSE, na.strings = "") %>%
+msoa_pop <- fread(here::here("data", "sape23dt4mid2020msoa.csv"), data.table = FALSE, na.strings = "") %>%
   mutate(msoa = as.factor(`MSOA Code`),
          msoa_pop = parse_number(`All Ages`)) %>%
   # Filter to England
@@ -101,7 +99,7 @@ write_csv(tpp_cov, here::here("output", "tables","tpp_pop_all.csv.gz"))
 
 
 ## Load shapefiles
-msoa_shp <- readRDS(args[3])
+msoa_shp <- readRDS(here::here("data", "msoa_shp.rds"))
 
 # ---------------------------------------------------------------------------- #
 

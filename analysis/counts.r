@@ -1,7 +1,15 @@
 ################################################################################
 # Description: Script to combine TPP & ONS data for deaths, imd, and age
 #
-# input: 
+# input: /output/cohorts/input.csv.gz
+#        /data/death_ons.csv.gz
+#        /data/imd_ons.csv.gz
+#        /data/age_ons_sex.csv.gz
+#
+# output: /output/tables/age_sex_count.csv.gz
+#         /output/tables/age_count.csv.gz
+#         /output/tables/death_count.csv.gz
+#         /output/tables/imd_count.csv.gz
 #
 # Author: Colm D Andrews
 # Date: 08/10/2021
@@ -43,18 +51,8 @@ df_input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
 
 ###################################### deaths
 ##import ONS death data
+death_ons<-read_csv(here::here("data","death_ons.csv.gz")) 
 
-death_ons<-read_csv(here::here("data","ONSdeaths2020.csv"),skip = 11)
-ons_total<-read_csv(here::here("data","ONSdeaths2020.csv"),skip = 10,n_max = 1) %>%
-   rename("x1"=1,"Total"=2) %>% select(Total)
-
-### reformat ons data
-death_ons<-death_ons %>% rename("cod"=1,"Count"=2) %>% bind_cols(ons_total) %>%
-  mutate(Cause_of_Death=case_when(str_sub(cod,1,3)=="U07"~"COVID-19",
-                                  str_sub(cod,4,4)=="-"~str_sub(cod,9),
-                                  str_sub(cod,4,4)==" "~str_sub(cod,5))) %>%
-mutate(Percentage = round((Count/Total),4)*100,Cohort="ONS") %>%
-  select(-cod,-Total)
   
 TPP_death <- df_input %>% 
     mutate(
@@ -99,7 +97,7 @@ TPP_death <- df_input %>%
                   cause >= "K70" & cause <="K77" ~ "Diseases of liver",
                   cause >= "V01" & cause <="V89" ~ "Land transport accidents",
                   cause >= "X60" & cause <="X84" ~ "Intentional self-harm",
-                  cause >= "Y10" & cause <="Y34" ~ "Intentional self-harm",
+                  cause >= "Y10" & cause <="Y34" ~ "Event of undetermined intent",
                   cause == "U07" |cause == "U10.9" ~ "COVID-19")) %>%
       drop_na(Cause_of_Death)
   
@@ -119,19 +117,8 @@ write_csv(redacted_deaths,here::here("output", "tables","death_count.csv.gz"))  
 
 ############################# imd ###################################################
 
-imd_ons<-read_csv(here::here("data","populationbyimdenglandandwales2020.csv"),skip = 2) 
+imd_ons<-read_csv(here::here("data","imd_ons.csv.gz")) 
 
-imd_sex_ons<-imd_ons %>% rename("sex"=1,"imd"=2) %>% mutate(Total=rowSums(across(!imd & !sex))) %>%
-  select(sex,imd,Total) %>% drop_na(Total) %>% fill(sex) %>% 
-  mutate(imd = case_when(row_number() %% 2==1~(imd+1)/2,row_number() %% 2==0~imd/2,)) %>%
-  group_by(sex,imd) %>%
-  summarise(Total=sum(Total))
-
-imd_ons<-imd_sex_ons %>%
-  group_by(imd) %>%
-  summarise(Total=sum(Total)) %>%
-  mutate(sex="Total") %>% bind_rows(imd_sex_ons) %>%
-  mutate(cohort="ONS")
 
 
 imd_sex<-df_input %>%
@@ -155,33 +142,7 @@ redacted_imd <- imd %>% mutate_at(vars(Total),redactor) %>%
 write_csv(redacted_imd,here::here("output", "tables","imd_count.csv.gz"))  ####add .gz to the end
 
 ############################################## age
-
-age_ons<-read_csv(here::here("data","ukpopestimatesmid2020.csv"),skip = 7) %>%
-    filter(Name=="ENGLAND") %>% select(-starts_with("x"),-Code,-Name,-Geography) %>%
-    rownames_to_column %>%
-    gather(variable, value, -rowname) %>% 
-    spread(rowname, value) %>%  rename("age"=1,"n"=2) %>%
-    mutate(cohort="ONS") %>% filter(age!="All ages") %>%
-  mutate(age=as.factor(age))
-  
-
-age_ons_sex<-read_csv(here::here("data","ukpopestimatesmid2020_male.csv"),skip = 7) %>%
-  filter(Name=="ENGLAND") %>% select(-starts_with("x"),-Code,-Name,-Geography) %>%
-  rownames_to_column %>%
-  gather(variable, value, -rowname) %>% 
-  spread(rowname, value) %>%  rename("age"=1,"n"=2) %>%
-  mutate(cohort="ONS") %>% filter(age!="All ages") %>%
-  mutate(age=as.factor(age)) %>% mutate(sex="Males")
-
-age_ons_female<-read_csv(here::here("data","ukpopestimatesmid2020_female.csv"),skip = 7) %>%
-  filter(Name=="ENGLAND") %>% select(-starts_with("x"),-Code,-Name,-Geography) %>%
-  rownames_to_column %>%
-  gather(variable, value, -rowname) %>% 
-  spread(rowname, value) %>%  rename("age"=1,"n"=2) %>%
-  mutate(cohort="ONS") %>% filter(age!="All ages") %>%
-  mutate(age=as.factor(age))  %>% mutate(sex="Females") %>%
-  bind_rows(age_ons_sex) -> age_ons_sex
-
+age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) 
 
 age_sex_tpp <- df_input %>%
   mutate(age=case_when(age<90~age,age>=90~90)) %>%   

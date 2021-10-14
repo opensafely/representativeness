@@ -15,8 +15,8 @@ library(readr)
 agelevels<-readRDS(here::here("output", "tables","levels.RData"))
 
 
-dir.create(here::here("output", "plots"), showWarnings = FALSE, recursive=TRUE)
 
+fs::dir_create(here::here("output", "plots"))
  
 death<-read_csv(here::here("output", "tables","death_count.csv.gz"))
 

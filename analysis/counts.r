@@ -112,7 +112,7 @@ mutate(Percentage = round((Count/total),4)*100,Cohort="TPP")  %>%
 
 redacted_deaths <- deaths %>% mutate_at(vars(Count),redactor) %>%
   mutate(Percentage=case_when(!is.na(Count)~Percentage))
-write_csv(redacted_deaths,here::here("output", "tables","death_count.csv.gz"))  ####add .gz to the end
+write_csv(redacted_deaths,here::here("output", "tables","death_count.csv"))  ####add .gz to the end
 
 
 ############################# imd ###################################################
@@ -139,7 +139,7 @@ imd<-imd_sex%>%
 redacted_imd <- imd %>% mutate_at(vars(Total),redactor) %>%
   mutate(Percentage=case_when(!is.na(Total)~Percentage))
 
-write_csv(redacted_imd,here::here("output", "tables","imd_count.csv.gz"))  ####add .gz to the end
+write_csv(redacted_imd,here::here("output", "tables","imd_count.csv"))  ####add .gz to the end
 
 ############################################## age
 age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) 
@@ -173,8 +173,8 @@ age<-  age_sex %>%
 redacted_age <- age %>% mutate_at(vars(n),redactor) %>%
   mutate(Percentage=case_when(!is.na(n)~Percentage))
 
-write_csv(redacted_age,here::here("output", "tables","age_count.csv.gz"))
+write_csv(redacted_age,here::here("output", "tables","age_count.csv"))
 
 redacted_age_sex <- age_sex %>% mutate_at(vars(n),redactor) %>%
   mutate(Percentage=case_when(!is.na(n)~Percentage))
-write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv.gz"))  ####add .gz to the en
+write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the en

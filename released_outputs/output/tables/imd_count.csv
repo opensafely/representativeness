@@ -1,0 +1,46 @@
+imd,Total,sex,cohort,Percentage
+1: Most deprived,5693353,Females,ONS,19.93
+2,5826175,Females,ONS,20.39
+3,5792553,Females,ONS,20.28
+4,5667668,Females,ONS,19.84
+5: Least deprived,5587571,Females,ONS,19.56
+1: Most deprived,5607790,Males,ONS,20.04
+2,5803668,Males,ONS,20.74
+3,5692471,Males,ONS,20.34
+4,5510306,Males,ONS,19.689999999999998
+5: Least deprived,5368583,Males,ONS,19.189999999999998
+1: Most deprived,11301143,Total,ONS,19.98
+2,11629843,Total,ONS,20.57
+3,11485024,Total,ONS,20.31
+4,11177974,Total,ONS,19.77
+5: Least deprived,10956154,Total,ONS,19.37
+Unknown,262232,Females,TPP,2.18
+1: Most deprived,2377966,Females,TPP,19.759999999999998
+2,2343120,Females,TPP,19.470000000000002
+3,2498771,Females,TPP,20.76
+4,2365627,Females,TPP,19.66
+5: Least deprived,2187343,Females,TPP,18.17
+Unknown,NA,I,TPP,NA
+1: Most deprived,53,I,TPP,21.9
+2,53,I,TPP,21.9
+3,40,I,TPP,16.53
+4,62,I,TPP,25.619999999999997
+5: Least deprived,29,I,TPP,11.98
+Unknown,246769,Males,TPP,2.0500000000000003
+1: Most deprived,2463357,Males,TPP,20.48
+2,2383695,Males,TPP,19.82
+3,2485403,Males,TPP,20.669999999999998
+4,2316566,Males,TPP,19.259999999999998
+5: Least deprived,2131019,Males,TPP,17.72
+Unknown,509013,Total,TPP,2.12
+1: Most deprived,4841445,Total,TPP,20.119999999999997
+2,4726920,Total,TPP,19.64
+3,4984274,Total,TPP,20.71
+4,4682308,Total,TPP,19.46
+5: Least deprived,4318441,Total,TPP,17.95
+Unknown,NA,Unknown,TPP,NA
+1: Most deprived,69,Unknown,TPP,23.71
+2,52,Unknown,TPP,17.87
+3,60,Unknown,TPP,20.62
+4,53,Unknown,TPP,18.21
+5: Least deprived,50,Unknown,TPP,17.18

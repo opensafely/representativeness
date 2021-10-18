@@ -145,6 +145,7 @@ write_csv(redacted_imd,here::here("output", "tables","imd_count.csv"))  ####add 
 age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) 
 
 age_sex_tpp <- df_input %>%
+  filter(age>=0)  %>%
   mutate(age=case_when(age<90~age,age>=90~90)) %>%   
   arrange(age) %>%
   mutate(age=as.factor(age)) %>% mutate(age= fct_recode(age,'90+'="90")) %>%

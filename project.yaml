@@ -16,10 +16,10 @@ actions:
     needs: [generate_cohort]
     outputs:
       moderately_sensitive:
-        death_count: output/tables/death_count.csv.gz
-        imd_table: output/tables/imd_count.csv.gz
-        age_sex_table: output/tables/age_sex_count.csv.gz
-        age_table: output/tables/age_count.csv.gz
+        death_count: output/tables/death_count.csv
+        imd_table: output/tables/imd_count.csv
+        age_sex_table: output/tables/age_sex_count.csv
+        age_table: output/tables/age_count.csv
         levels: output/tables/levels.RData
 
   plots:

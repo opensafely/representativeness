@@ -36,6 +36,7 @@ redactor <- function(n, threshold=6,e_overwrite=NA_integer_){
 }
 print("redactor function")
 
+agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
 
 ## import libraries
@@ -106,7 +107,7 @@ deaths <- TPP_death %>%
 # calculate frequency of each code 
 group_by(Cause_of_Death) %>% 
 summarise(Count = n(),total=mean(total)) %>% 
-mutate(Percentage = round((Count/total),4)*100,Cohort="TPP")  %>% 
+mutate(Percentage = round((Count/total)*100,4),Cohort="TPP")  %>% 
   select(-total) %>%
   bind_rows(death_ons)
 
@@ -131,7 +132,7 @@ imd<-imd_sex%>%
   mutate(cohort="TPP")  %>% 
   bind_rows(imd_ons)%>%
   group_by(sex,cohort) %>%
-  mutate(Percentage = round((Total/sum(Total)),4)*100) %>%
+  mutate(Percentage = round((Total/sum(Total))*100,4)) %>%
   ungroup() %>% arrange(cohort,sex,imd) %>%
   mutate(imd = case_when(imd==1~"1: Most deprived",imd==2~"2",imd==3~"3",imd==4~"4",imd==0~"Unknown",imd==5~"5: Least deprived"))
 
@@ -146,30 +147,27 @@ age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz"))
 
 age_sex_tpp <- df_input %>%
   filter(age>=0)  %>%
-  mutate(age=case_when(age<90~age,age>=90~90)) %>%   
-  arrange(age) %>%
-  mutate(age=as.factor(age)) %>% mutate(age= fct_recode(age,'90+'="90")) %>%
-  group_by(age,sex) %>% summarise(n = n()) %>%
-  mutate(cohort="TPP") 
+  mutate(age=(case_when(age>90~90,TRUE~age)),
+    age_group = cut(age, breaks = seq(0,95,5), right = F, labels = agelevels)) %>%
+  group_by(age_group,sex) %>% summarise(n = n()) %>%
+  mutate(cohort="TPP")
          
 age_sex<- age_sex_tpp %>%        
   bind_rows(age_ons_sex)%>%
-  group_by(cohort,sex) %>%
-  mutate(Percentage = round((n/sum(n)),4)*100) %>%
-  ungroup() %>%
-  mutate(age=factor(age,levels=levels(age_sex_tpp$age))) %>%
-  arrange(cohort,age)
+  group_by(sex,cohort) %>%
+  mutate(Percentage = round((n/sum(n))*100,1)) %>%
+  arrange(cohort,age_group)
   
-agelevels<-levels(age_sex_tpp$age)
-saveRDS(agelevels, here::here("output", "tables","levels.RData"))
+#agelevels<-levels(age_sex_tpp$age)
+#saveRDS(agelevels, here::here("output", "tables","levels.RData"))
 
 age<-  age_sex %>%
-  group_by(cohort,age) %>%
+  group_by(cohort,age_group) %>%
   summarise(n = sum(abs(n)))%>%
-  mutate(Percentage = round((n/sum(n)),4)*100) %>%
+  mutate(Percentage = round((n/sum(n))*100,1)) %>%
   ungroup() %>% 
-  mutate(age=factor(age,levels=levels(age_sex_tpp$age)))%>%
-  arrange(cohort,age)
+#  mutate(age=factor(age,levels=levels(age_sex_tpp$age)))%>%
+  arrange(cohort,age_group)
 
 redacted_age <- age %>% mutate_at(vars(n),redactor) %>%
   mutate(Percentage=case_when(!is.na(n)~Percentage))

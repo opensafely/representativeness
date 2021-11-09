@@ -15,6 +15,7 @@
 #
 ################################################################################
 
+agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
 library("readxl")
 library("tidyverse")
@@ -49,8 +50,9 @@ age_ons<-read_excel(here::here("data","ukpopestimatesmid2020on2021geography.xls"
   gather(variable, value, -rowname) %>% 
   spread(rowname, value) %>%  rename("age"=1,"n"=2) %>%
   mutate(cohort="ONS") %>% filter(age!="All ages") %>%
-  mutate(age=as.factor(age))
-
+  mutate(age=as.numeric(age))  %>%
+  replace_na(list(age=90))  %>%
+  mutate(age_group = cut(age, breaks = seq(0,95,5), right = F, labels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")))
 
 age_ons_males<-read_excel(here::here("data","ukpopestimatesmid2020on2021geography.xls"),sheet ="MYE2 - Males" ,skip = 7) %>%
   filter(Name=="ENGLAND") %>% 
@@ -60,8 +62,13 @@ age_ons_males<-read_excel(here::here("data","ukpopestimatesmid2020on2021geograph
   spread(rowname, value) %>%  rename("age"=1,"n"=2) %>%
   mutate(cohort="ONS") %>% 
   filter(age!="All ages") %>%
-  mutate(age=as.factor(age),
-         sex="Males")
+  mutate(age=as.numeric(age))  %>%
+  replace_na(list(age=90))  %>%
+  mutate(age_group = cut(age, breaks = seq(0,95,5), right = F, labels = agelevels),
+         sex="Males")  %>%
+  group_by(age_group) %>%
+  mutate(n=sum(n))
+
 
 age_ons_female<-read_excel(here::here("data","ukpopestimatesmid2020on2021geography.xls"),sheet ="MYE2 - Females" ,skip = 7) %>%
   filter(Name=="ENGLAND") %>%
@@ -71,9 +78,15 @@ age_ons_female<-read_excel(here::here("data","ukpopestimatesmid2020on2021geograp
   spread(rowname, value) %>%  rename("age"=1,"n"=2) %>%
   mutate(cohort="ONS") %>% 
   filter(age!="All ages") %>%
-  mutate(age=as.factor(age),
+  mutate(age=as.numeric(age))  %>%
+  replace_na(list(age=90))  %>%
+  mutate(age_group = cut(age, breaks = seq(0,95,5), right = F, labels =agelevels),
          sex="Females") %>%
-  bind_rows(age_ons_males) -> age_ons_sex
+  group_by(age_group) %>%
+  mutate(n=sum(n)) %>%
+  bind_rows(age_ons_males) %>%
+  select(-age) %>%
+  distinct()  -> age_ons_sex
 
 write_csv(age_ons_sex,here::here("data","age_ons_sex.csv.gz"))  ####add .gz to the end
 

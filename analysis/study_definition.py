@@ -55,7 +55,7 @@ study = StudyDefinition(
     died_cause_ons=patients.died_from_any_cause(
         between=[index_date,end_date],
         returning="underlying_cause_of_death",
-        return_expectations={"category": {"ratios": {"U071":0.2, "C15":0.2, "C16":0.1, "C18":0.1 , "F01":0.05 , "K25.1":0.05 ,"J40":0.05, "E10.2":0.25}},},
+        return_expectations={"category": {"ratios": {"U071":0.2, "C33":0.2, "I60":0.1, "F01":0.1 , "F02":0.05 , "I22":0.05 ,"C34":0.05, "I23":0.25}},},
     ),
 
     died_ons_covid_flag_any=patients.with_these_codes_on_death_certificate(

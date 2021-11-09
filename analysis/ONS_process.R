@@ -92,16 +92,15 @@ write_csv(age_ons_sex,here::here("data","age_ons_sex.csv.gz"))  ####add .gz to t
 
 ###### death
 ###### ONS data downloaded va Nomis: https://www.nomisweb.co.uk/query/construct/components/apicomponent.aspx?menuopt=1611&subcomp=
-death_ons<-read_csv(here::here("data","ONSdeaths2020.csv"),skip = 11)
-ons_total<-read_csv(here::here("data","ONSdeaths2020.csv"),skip = 10,n_max = 1) %>%
+death_ons<-read_excel(here::here("data","nomis_2021_11_09_141838.xlsx"),skip = 10)
+ons_total<-read_excel(here::here("data","nomis_2021_11_09_141838.xlsx"),skip = 9,n_max = 1) %>%
   rename("x1"=1,"Total"=2) %>% select(Total)
 
 ### reformat ons data
 death_ons<-death_ons %>% rename("cod"=1,"Count"=2) %>% bind_cols(ons_total) %>%
-  mutate(Cause_of_Death=case_when(str_sub(cod,1,3)=="U07"~"COVID-19",
-                                  str_sub(cod,4,4)=="-"~str_sub(cod,9),
-                                  str_sub(cod,4,4)==" "~str_sub(cod,5))) %>%
-  mutate(Percentage = round((Count/Total),4)*100,Cohort="ONS") %>%
-  select(-cod,-Total)
+  mutate(Cause_of_Death=str_split(cod, " ", 2),
+         Cause_of_Death=sapply(Cause_of_Death,"[",2),
+         Percentage = round((Count/Total),4)*100,Cohort="ONS") %>%
+          select(-cod,-Total)
 
 write_csv(death_ons,here::here("data","death_ons.csv.gz"))  ####add .gz to the end

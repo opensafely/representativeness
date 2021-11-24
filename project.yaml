@@ -47,5 +47,5 @@ actions:
     needs: [generate_cohort]
     outputs:
       moderately_sensitive:
-        msoa_table: output/tables/tpp_pop_all.csv.gz
-        msoa_map: output/plots/tpp_coverage_map.svg
+        region_table: output/tables/tpp_pop_all.csv
+        region_map: output/plots/tpp_coverage_map.svg

@@ -17,13 +17,8 @@
 msoa_map<-read_csv(here::here("data","ONS_MSOA_to_region_map.csv")) %>%
   select(MSOA11CD,RGN11NM)
   
-
-agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
-
 library("readxl")
 library("tidyverse")
-
-
 
 ############## IMD
 input_imd_ons<-read_excel(here::here("data","populationbyimdenglandandwales2020.xlsx"),sheet="Table 1 - England",skip = 2) 
@@ -102,73 +97,6 @@ age_ons<-age_ons  %>% filter(Age!="All Ages") %>%
 
 write_csv(age_ons,here::here("data","age_ons_sex.csv.gz"))  ####add .gz to the end
 
-
-# age_ons<-read_csv(here::here("data","34674549.csv"),skip = 6,show_col_types = FALSE) %>%
-# rename("msoa_name"=1) %>% 
-#   mutate(areas=str_split(msoa_name, " : ", 2),
-#          msoa=sapply(areas,"[",1),
-#          msoa_name=sapply(areas,"[",2)) %>% 
-# filter(str_sub(msoa,1,1)=="E") %>%
-#   left_join(msoa_map,by=c("msoa"="MSOA11CD"))%>%
-# rename("region"="RGN11NM") %>%
-#  group_by(region) %>%
-#   summarise(across(starts_with("age"),sum)) %>%
-#   gather(variable, value, -region) %>% 
-#   spread(region, value) %>%
-#   mutate(variable=parse_number(variable)) %>%
-#   rename("age"="variable")%>%
-#   mutate(age_group = cut(age, breaks = seq(0,95,5), right = F, labels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")),
-#          n = rowSums(across(!starts_with("age"))),
-#          cohort="ONS") 
-            
-
-
-
-# age_ons_female<-read_csv(here::here("data","124465290female.csv"),skip = 6,show_col_types = FALSE) %>%
-#   rename("msoa_name"=1) %>% 
-#   mutate(areas=str_split(msoa_name, " : ", 2),
-#          msoa=sapply(areas,"[",1),
-#          msoa_name=sapply(areas,"[",2)) %>% 
-#   filter(str_sub(msoa,1,1)=="E") %>%
-#   left_join(msoa_map,by=c("msoa"="MSOA11CD"))%>%
-#   rename("region"="RGN11NM") %>%
-#   group_by(region) %>%
-#   summarise(across(starts_with("age"),sum)) %>%
-#   gather(variable, value, -region) %>% 
-#   spread(region, value) %>%
-#   mutate(variable=parse_number(variable)) %>%
-#   rename("age"="variable")%>%
-#   mutate(age_group = cut(age, breaks = seq(0,95,5), right = F, labels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")),
-#          n = rowSums(across(!starts_with("age"))),
-#          cohort="ONS",
-#          sex="female")
-# 
-# 
-# 
-# 
-# 
-# 
-# age_ons_male<-read_csv(here::here("data","1403030074male.csv"),skip = 6,show_col_types = FALSE) %>%
-#   rename("msoa_name"=1) %>% 
-#   mutate(areas=str_split(msoa_name, " : ", 2),
-#          msoa=sapply(areas,"[",1),
-#          msoa_name=sapply(areas,"[",2)) %>% 
-#   filter(str_sub(msoa,1,1)=="E") %>%
-#   left_join(msoa_map,by=c("msoa"="MSOA11CD"))%>%
-#   rename("region"="RGN11NM") %>%
-#   group_by(region) %>%
-#   summarise(across(starts_with("age"),sum)) %>%
-#   gather(variable, value, -region) %>% 
-#   spread(region, value) %>%
-#   mutate(variable=parse_number(variable)) %>%
-#   rename("age"="variable")%>%
-#   mutate(age_group = cut(age, breaks = seq(0,95,5), right = F, labels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")),
-#          n = rowSums(across(!starts_with("age"))),
-#          cohort="ONS",
-#          sex="male")
-#
-# write_csv(age_ons_sex,here::here("data","age_ons_sex.csv.gz"))  ####add .gz to the end
-
 ###### death
 ###### ONS data downloaded va Nomis: https://www.nomisweb.co.uk/query/construct/components/apicomponent.aspx?menuopt=1611&subcomp=
 death_ons<-read_excel(here::here("data","nomis_2021_11_22_104904.xlsx"),skip = 8)
@@ -195,7 +123,6 @@ write_csv(death_ons,here::here("data","death_ons.csv.gz"))  ####add .gz to the e
 
 
 ######### Ethnicity
-
 
 eth_ons<-read_excel(here::here("data","nomis_2021_11_22_213653.xlsx"),skip = 8,n_max = 19) %>%
   mutate(Ethnic_Group=str_split(`Ethnic Group`, ": ", 2),
@@ -238,5 +165,4 @@ eth_ons_2001 <-eth_5_ons %>%
   bind_rows(eth_16_ons) %>%
   mutate(cohort="ONS")
   
-
 write_csv(eth_ons_2001,here::here("data","ethnicity_ons.csv.gz")) 

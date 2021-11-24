@@ -17,7 +17,8 @@ agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
 
 
 fs::dir_create(here::here("output", "plots"))
- 
+############################# deaths
+
 death<-read_csv(here::here("output", "tables","death_count.csv"))
 
 death_plot<-death %>%
@@ -40,9 +41,8 @@ imd_plot<-imd %>% filter(sex=="Total") %>%
   theme_classic() + theme(axis.text.x = element_text( hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of Population")
 ggsave(filename=here::here("output", "plots","imd_count.svg"),imd_plot)
 
-################################################ age
+################################################ age by sex
 age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv"))
-
 
 age_sex<- age_sex %>%
      mutate(Percentage=case_when( sex=="Female"~Percentage,sex=="Male"~(-1*Percentage))) %>%
@@ -74,7 +74,8 @@ age_sex_plot_eng<-age_sex %>%
 
 ggsave(filename=here::here("output", "plots","age_sex_count_eng.svg"),age_sex_plot_eng,width = 20, height = 15, units = "cm")
 
- 
+################################################ age
+
  age<-read_csv(here::here("output", "tables","age_count.csv"),col_types = cols(
     age_group =  readr::col_factor(levels=agelevels)))
  
@@ -96,7 +97,7 @@ age_plot_eng <-age %>%
 ggsave(filename=here::here("output", "plots","age_count_eng.svg"),age_plot_eng,width = 15, height = 10, units = "cm")
 
 
-###### sex
+############################################## sex
 sex<-age_sex %>%
   select(sex, cohort,N,region) %>%
   group_by(cohort,sex,region) %>%
@@ -129,7 +130,7 @@ ethnicity_plot<-ethnicity %>%
   filter(region!="England",group=="5_2001") %>%
   ggplot(aes(x=Ethnic_Group, y=percent, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
   theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
-ggsave(filename=here::here("output", "plots","ethnicity_count.svg"),ethnicity_plot,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity_count.svg"),ethnicity_plot,width = 45, height = 30, units = "cm")
 
 ethnicity_plot_eng<-ethnicity %>%
   filter(region=="England",group=="5_2001") %>%
@@ -142,7 +143,7 @@ ethnicity_plot16<-ethnicity %>%
   filter(region!="England",group=="16_2001") %>%
   ggplot(aes(x=Ethnic_Group, y=percent, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
   theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
-ggsave(filename=here::here("output", "plots","ethnicity16_count.svg"),ethnicity_plot16,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity16_count.svg"),ethnicity_plot16,width = 45, height = 30, units = "cm")
 
 ethnicity_plot16_eng<-ethnicity %>%
   filter(region=="England",group=="16_2001") %>%

@@ -52,20 +52,20 @@ nuts1_pop <- read_csv(here::here("data","age_ons_sex.csv.gz"),n_max=9) %>%
                                
 # ---------------------------------------------------------------------------- #
 
-print("No. MSOAs in England:")
+print("No. Regions in England:")
 n_distinct(nuts1_pop$nuts1code)
 
-print("No. TPP-registered patients with non-missing MSOA:")
+print("No. TPP-registered patients with non-missing Regions:")
 nrow(input)
 
-print("No. unique MSOAs with patients registered in TPP:")
-n_distinct(input$msoa)
+print("No. unique Regions with patients registered in TPP:")
+n_distinct(input$Region)
 
 
 # ---------------------------------------------------------------------------- #
 
 #----------------------------------------------------#
-#  Aggregate by MSOA and merge with ONS population   #
+#  Aggregate by Region and merge with ONS population   #
 #----------------------------------------------------#
 
 tpp_cov<-input %>%
@@ -95,19 +95,16 @@ summary(tpp_cov)
 #   Save    #
 #------------------------------------------#
 
-write_csv(tpp_cov, here::here("output", "tables","tpp_pop_all.csv.gz"))
+write_csv(tpp_cov, here::here("output", "tables","tpp_pop_all.csv"))
 
 ################################################################################
 
 
 
 ## Load shapefiles
-msoa_shp <- readRDS(here::here("data", "msoa_shp.rds"))
-
 nuts_shp<-st_read("data/NUTS_Level_1_(January_2018)_Boundaries.shp")
 saveRDS(nuts_shp,here::here("data", "nuts_shp.rds"))
 nuts_shp<-readRDS(here::here("data", "nuts_shp.rds"))
-
 
   coverage_plot<-nuts_shp %>%
   filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%

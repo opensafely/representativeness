@@ -38,7 +38,6 @@ print("redactor function")
 
 agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
-
 ## import libraries
 library('tidyverse')
 library('sf')
@@ -47,8 +46,6 @@ fs::dir_create(here::here("output", "tables"))
 # # import data
 df_input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
   mutate(sex = case_when(sex=="F"~"Female",sex=="M"~"Male",sex=="I"~"I",sex=="U"~"Unknown"))
-
-
 
 ###################################### deaths
 ##import ONS death data
@@ -106,7 +103,6 @@ TPP_death <- df_input %>%
                  )) %>%
       drop_na(Cause_of_Death) %>%
   group_by(region) %>%
-#  tally(name =  "tpp_pop_all") %>%
   mutate(Total=sum(died_any)) %>%
   ungroup() %>%
   group_by(region,Cause_of_Death) %>%
@@ -190,9 +186,6 @@ age_sex_tpp <-age_sex_tpp %>%
   bind_rows(age_ons_sex) %>%
     filter(sex=="Male" | sex=="Female")
 
-  
-#agelevels<-levels(age_sex_tpp$age)
-#saveRDS(agelevels, here::here("output", "tables","levels.RData"))
 age_ons_total<-age_ons_sex %>%
   filter(sex=="Total")
   
@@ -215,8 +208,6 @@ write_csv(redacted_age,here::here("output", "tables","age_count.csv"))
 redacted_age_sex <- age_sex %>% mutate_at(vars(N),redactor) %>%
   mutate(Percentage=case_when(!is.na(N)~percentage))
 write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the en
-
-
 
 ################ Ethnicity
 

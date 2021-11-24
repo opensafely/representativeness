@@ -20,6 +20,7 @@ actions:
         imd_table: output/tables/imd_count.csv
         age_sex_table: output/tables/age_sex_count.csv
         age_table: output/tables/age_count.csv
+        ethnicity_table: output/tables/ethnic_group.csv
 
 
   plots:
@@ -32,7 +33,14 @@ actions:
         figure3: output/plots/age_sex_count.svg
         figure4: output/plots/age_count.svg
         figure5: output/plots/sex_count.svg
-
+        figure6: output/plots/Cause_of_Death_count_eng.svg
+        figure7: output/plots/age_sex_count_eng.svg
+        figure8: output/plots/age_count_eng.svg
+        figure9: output/plots/sex_count_eng.svg
+        figure10: output/plots/ethnicity_count_eng.svg
+        figure11: output/plots/ethnicity_count.svg
+        figure12: output/plots/ethnicity16_count_eng.svg
+        figure13: output/plots/ethnicity16_count.svg
 
   calculate_tpp_coverage:
     run: r:latest analysis/calculate_tpp_coverage.R
@@ -41,6 +49,3 @@ actions:
       moderately_sensitive:
         msoa_table: output/tables/tpp_pop_all.csv.gz
         msoa_map: output/plots/tpp_coverage_map.svg
-        
-
-

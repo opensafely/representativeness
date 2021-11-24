@@ -42,24 +42,18 @@ options(datatable.old.fread.datetime.character = TRUE)
 ## TPP-registered patient records (from study definition)
 ## Include ALL patients with non-missing MSOA in calculation of TPP populations
 input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
-  # Remove individuals w missing/non-England MSOA
-  filter(grepl("E",msoa) & !is.na(msoa)) %>%
-  mutate(`65+` =case_when(age>=65~1) )
+  # Remove individuals w missing region
+  filter(!is.na(region))
 
 ## National MSOA population estimates (ONS mid-2020):
-msoa_pop <- fread(here::here("data", "sape23dt4mid2020msoa.csv"), data.table = FALSE, na.strings = "") %>%
-  mutate(msoa = as.factor(`MSOA Code`),
-         msoa_pop = parse_number(`All Ages`)) %>%
-  # Filter to England
-  filter(grepl("E", msoa)) %>%
-  ungroup() %>%
-  select(msoa, msoa_pop)
-
-
+nuts1_pop <- read_csv(here::here("data","age_ons_sex.csv.gz"),n_max=9) %>%
+  select(Region,Total) %>%
+  rename("region"="Region")
+                               
 # ---------------------------------------------------------------------------- #
 
 print("No. MSOAs in England:")
-n_distinct(msoa_pop$msoa)
+n_distinct(nuts1_pop$nuts1code)
 
 print("No. TPP-registered patients with non-missing MSOA:")
 nrow(input)
@@ -76,12 +70,21 @@ n_distinct(input$msoa)
 
 tpp_cov<-input %>%
   # Count records per MSOA
-  group_by(msoa) %>%
+  group_by(region) %>%
   tally(name =  "tpp_pop_all") %>%
   ungroup() %>%
-  right_join(msoa_pop,by="msoa") %>%
-  mutate(msoa = as.factor(msoa),
-         tpp_cov_all = tpp_pop_all*100/msoa_pop)
+  right_join(nuts1_pop,by="region") %>%
+  mutate(nuts118cd = case_when(region=="East"~"UKH",
+                               region=="North West"~"UKD",
+                               region=="North East"~"UKC",
+                               region=="Yorkshire and The Humber"~"UKE",
+                               region=="East Midlands"~"UKF",
+                               region=="West Midlands"~"UKG",
+                               region=="London"~"UKI",
+                               region=="South East"~"UKJ",
+                               region=="South West"~"UKK"),
+         region = as.factor(region),
+         tpp_cov_all = tpp_pop_all*100/Total)
 
 
 summary(tpp_cov)
@@ -101,22 +104,25 @@ write_csv(tpp_cov, here::here("output", "tables","tpp_pop_all.csv.gz"))
 ## Load shapefiles
 msoa_shp <- readRDS(here::here("data", "msoa_shp.rds"))
 
+nuts_shp<-st_read("data/NUTS_Level_1_(January_2018)_Boundaries.shp")
+saveRDS(nuts_shp,here::here("data", "nuts_shp.rds"))
+nuts_shp<-readRDS(here::here("data", "nuts_shp.rds"))
+
+
+  coverage_plot<-nuts_shp %>%
+  filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%
+    left_join(tpp_cov,by="nuts118cd") %>%
+    ggplot(aes(geometry = geometry,fill=tpp_cov_all)) +
+    geom_sf(lwd = 0, colour='grey') +
+    scale_fill_gradient2(midpoint = 100, high = "navyblue", mid = "indianred", low = "ivory1",na.value = "white") +
+    theme(legend.position = c(0.2,0.9),panel.background=element_rect(fill="lightblue"))
+  
 # ---------------------------------------------------------------------------- #
 
 #----------------------#
 #       FIGURES        #
 #----------------------#
 
-
-
-coverage_plot<-msoa_shp %>%
-  filter(grepl("E",MSOA11CD)) %>%
-  full_join(tpp_cov, by = c("MSOA11CD" = "msoa")) %>%
-  ggplot(aes(geometry = geometry, fill = tpp_cov_all)) +
-  geom_sf(lwd = 0, colour='grey') +
-  scale_fill_gradient2(midpoint = 100, high = "navyblue", mid = "indianred", low = "ivory1",na.value = "white") +
-  theme(legend.position = c(0.2,0.9),panel.background=element_rect(fill="lightblue"))
-  
   
   ggsave(filename=here::here("output", "plots","tpp_coverage_map.svg"),coverage_plot)
 

@@ -1,21 +1,22 @@
 ################################################################################
 # Description: Script to combine TPP & ONS data for deaths, imd, and age
 #
-# input: /output/cohorts/input.csv.gz
-#        /data/death_ons.csv.gz
-#        /data/imd_ons.csv.gz
-#        /data/age_ons_sex.csv.gz
+# input:  /output/cohorts/input.csv.gz
+#         /data/death_ons.csv.gz
+#         /data/imd_ons.csv.gz
+#         /data/age_ons_sex.csv.gz
+#         /data/ethnicity_ons.csv.gz
 #
 # output: /output/tables/age_sex_count.csv.gz
 #         /output/tables/age_count.csv.gz
 #         /output/tables/death_count.csv.gz
 #         /output/tables/imd_count.csv.gz
+#         /output/tables/ethnic_group.csv
 #
 # Author: Colm D Andrews
-# Date: 08/10/2021
+# Date: 26/11/2021
 #
 ################################################################################
-
 
 ## Redactor code (W.Hulme)
 redactor <- function(n, threshold=6,e_overwrite=NA_integer_){
@@ -36,22 +37,22 @@ redactor <- function(n, threshold=6,e_overwrite=NA_integer_){
 }
 print("redactor function")
 
-
+agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
 ## import libraries
 library('tidyverse')
 library('sf')
 fs::dir_create(here::here("output", "tables"))
 
-# # import data
+# # import TPP data
 df_input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
-  mutate(sex = case_when(sex=="F"~"Females",sex=="M"~"Males",sex=="I"~"I",sex=="U"~"Unknown"))
-
-
+  mutate(sex = case_when(sex=="F"~"Female",sex=="M"~"Male",sex=="I"~"I",sex=="U"~"Unknown"))
 
 ###################################### deaths
 ##import ONS death data
-death_ons<-read_csv(here::here("data","death_ons.csv.gz")) 
+death_ons<-read_csv(here::here("data","death_ons.csv.gz")) %>%
+  rename("region"="Region") %>%
+  mutate(cohort="ONS")
 
   
 TPP_death <- df_input %>% 
@@ -73,45 +74,57 @@ TPP_death <- df_input %>%
                   TRUE ~ "Other"),
           Broad_Cause_of_Death = factor(Broad_Cause_of_Death, levels = c("Respiratory Disease", "Dementia", "Cardiovascular Disease", "Cancer", "Other", "COVID-19")),
           Cause_of_Death = case_when( 
-                  cause == "C15" ~ "Malignant neoplasm of oesophagus",
-                  cause == "C16" ~ "Malignant neoplasm of stomach",
-                  cause == "C18" ~ "Malignant neoplasm of colon",
-                  cause >= "C19" & cause <="C21" ~ "Malignant neoplasm of rectosigmoid junction, rectum and anus",
-                  cause == "C25" ~ "Malignant neoplasm of pancreas",
+                  # cause == "C15" ~ "Malignant neoplasm of oesophagus",
+                  # cause == "C16" ~ "Malignant neoplasm of stomach",
+                  # cause == "C18" ~ "Malignant neoplasm of colon",
+                  # cause >= "C19" & cause <="C21" ~ "Malignant neoplasm of rectosigmoid junction, rectum and anus",
+                  # cause == "C25" ~ "Malignant neoplasm of pancreas",
                   cause >= "C33" & cause <="C34" ~ "Malignant neoplasm of trachea, bronchus and lung",
-                  cause == "C43" ~ "Malignant melanoma of the skin",
-                  cause == "C44" ~ "Other malignant neoplasms of skin",
-                  cause == "C50" ~ "Malignant neoplasm of breast",
-                  cause == "C53" ~ "Malignant neoplasm of cervix uteri",
-                  cause == "C61" ~ "Malignant neoplasm of prostate",
-                  cause == "C67" ~ "Malignant neoplasm of bladder",
-                  cause >= "C91" & cause <="C95" ~ "Leukaemia",
-                  cause >= "E10" & cause <="E14" ~ "Diabetes mellitus",
-                  cause >= "F01" & cause <="F03" ~ "Dementias",
-                  cause == "G30" ~ "Alzheimer disease",
-                  cause >= "I20" & cause <="I25" ~ "Ischaemic heart diseases",
-                  cause >= "I60" & cause <="I69" ~ "Cerebrovascular diseases",
-                  cause >= "J12" & cause <="J18" ~ "Pneumonia",
-                  cause >= "J40" & cause <="J44" ~ "Bronchitis, emphysema and other chronic obstructive pulmonary disease",
-                  cause >= "K25" & cause <="K27" ~ "Gastric and duodenal ulcer",
-                  cause >= "K70" & cause <="K77" ~ "Diseases of liver",
-                  cause >= "V01" & cause <="V89" ~ "Land transport accidents",
-                  cause >= "X60" & cause <="X84" ~ "Intentional self-harm",
-                  cause >= "Y10" & cause <="Y34" ~ "Event of undetermined intent",
-                  cause == "U07" |cause == "U10.9" ~ "COVID-19")) %>%
-      drop_na(Cause_of_Death)
+                  # cause == "C43" ~ "Malignant melanoma of the skin",
+                  # cause == "C44" ~ "Other malignant neoplasms of skin",
+                  # cause == "C50" ~ "Malignant neoplasm of breast",
+                  # cause == "C53" ~ "Malignant neoplasm of cervix uteri",
+                  # cause == "C61" ~ "Malignant neoplasm of prostate",
+                  # cause == "C67" ~ "Malignant neoplasm of bladder",
+                  # cause >= "C91" & cause <="C95" ~ "Leukaemia",
+                  # cause >= "E10" & cause <="E14" ~ "Diabetes mellitus",
+                  # cause >= "F01" & cause <="F03" ~ "Dementias",
+                  # cause == "G30" ~ "Alzheimer disease",
+                    cause >= "I20" & cause <="I25" ~ "Ischaemic heart diseases",
+                   cause >= "I60" & cause <="I69" ~ "Cerebrovascular diseases",
+                  # cause >= "J12" & cause <="J18" ~ "Pneumonia",
+                  # cause >= "J40" & cause <="J44" ~ "Bronchitis, emphysema and other chronic obstructive pulmonary disease",
+                  # cause >= "K25" & cause <="K27" ~ "Gastric and duodenal ulcer",
+                  # cause >= "K70" & cause <="K77" ~ "Diseases of liver",
+                  # cause >= "V01" & cause <="V89" ~ "Land transport accidents",
+                  # cause >= "X60" & cause <="X84" ~ "Intentional self-harm",
+                  # cause >= "Y10" & cause <="Y34" ~ "Event of undetermined intent",
+                  cause == "U07" |cause == "U10.9" ~ "COVID-19",
+                  (cause >= "F01" & cause <="F03") | cause == "G30" ~ "Dementia and Alzheimer disease",
+                 )) %>%
+      drop_na(Cause_of_Death) %>%
+  group_by(region) %>%
+  mutate(Total=sum(died_any)) %>%
+  ungroup() %>%
+  group_by(region,Cause_of_Death) %>%
+  summarise(N=n(),total=mean(Total))
+
+TPP_death<-TPP_death %>%
+  group_by(Cause_of_Death) %>%
+  summarise(N=sum(N),total=sum(total)) %>%
+  mutate(region="England") %>%
+  bind_rows(TPP_death)  %>%
+  mutate(percent=N/total*100,
+         cohort="TPP") %>%
+  select(-total)
+
   
 ###### combine TPP and ONS data
 deaths <- TPP_death %>% 
-# calculate frequency of each code 
-group_by(Cause_of_Death) %>% 
-summarise(Count = n(),total=mean(total)) %>% 
-mutate(Percentage = round((Count/total),4)*100,Cohort="TPP")  %>% 
-  select(-total) %>%
-  bind_rows(death_ons)
+bind_rows(death_ons)
 
-redacted_deaths <- deaths %>% mutate_at(vars(Count),redactor) %>%
-  mutate(Percentage=case_when(!is.na(Count)~Percentage))
+redacted_deaths <- deaths %>% mutate_at(vars(N),redactor) %>%
+  mutate(percent=case_when(!is.na(N)~percent))
 write_csv(redacted_deaths,here::here("output", "tables","death_count.csv"))  ####add .gz to the end
 
 
@@ -131,7 +144,7 @@ imd<-imd_sex%>%
   mutate(cohort="TPP")  %>% 
   bind_rows(imd_ons)%>%
   group_by(sex,cohort) %>%
-  mutate(Percentage = round((Total/sum(Total)),4)*100) %>%
+  mutate(Percentage = round((Total/sum(Total))*100,4)) %>%
   ungroup() %>% arrange(cohort,sex,imd) %>%
   mutate(imd = case_when(imd==1~"1: Most deprived",imd==2~"2",imd==3~"3",imd==4~"4",imd==0~"Unknown",imd==5~"5: Least deprived"))
 
@@ -142,40 +155,122 @@ redacted_imd <- imd %>% mutate_at(vars(Total),redactor) %>%
 write_csv(redacted_imd,here::here("output", "tables","imd_count.csv"))  ####add .gz to the end
 
 ############################################## age
-age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) 
+age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) %>%
+  group_by(age_group,sex,Region) %>% 
+  summarise(N = sum(N),Total=sum(Total),percentage=sum(percentage)) %>%
+  rename("region"="Region") %>%
+  mutate(cohort="ONS")
 
 age_sex_tpp <- df_input %>%
   filter(age>=0)  %>%
-  mutate(age=case_when(age<90~age,age>=90~90)) %>%   
-  arrange(age) %>%
-  mutate(age=as.factor(age)) %>% mutate(age= fct_recode(age,'90+'="90")) %>%
-  group_by(age,sex) %>% summarise(n = n()) %>%
-  mutate(cohort="TPP") 
-         
-age_sex<- age_sex_tpp %>%        
-  bind_rows(age_ons_sex)%>%
-  group_by(cohort,sex) %>%
-  mutate(Percentage = round((n/sum(n)),4)*100) %>%
-  ungroup() %>%
-  mutate(age=factor(age,levels=levels(age_sex_tpp$age))) %>%
-  arrange(cohort,age)
+  mutate(age=(case_when(age>90~90,TRUE~age)),
+    age_group = cut(age, breaks = seq(0,95,5), right = F, labels = agelevels)) %>%
+  group_by(region,sex) %>%
+  mutate(Total=n()) %>%
+  ungroup %>%
+  group_by(age_group,region,sex) %>% summarise(N = n(),Total=first(Total))
+
+### Add England
+age_sex_tpp <-age_sex_tpp %>%
+  group_by(sex,age_group) %>%
+  summarise(N=sum(N)) %>% 
+  group_by(sex) %>%
+    mutate(Total=sum(N), 
+            region="England") %>%
+  bind_rows(age_sex_tpp) %>%
+  mutate(percentage=N/Total * 100,
+         cohort="TPP")
+
+
+
+  age_sex <- age_sex_tpp %>%        
+  bind_rows(age_ons_sex) %>%
+    filter(sex=="Male" | sex=="Female")
+
+age_ons_total<-age_ons_sex %>%
+  filter(sex=="Total")
   
-agelevels<-levels(age_sex_tpp$age)
-saveRDS(agelevels, here::here("output", "tables","levels.RData"))
+age<-  age_sex_tpp %>%
+  group_by(region,age_group) %>%
+  summarise(N = sum(N)) %>%
+  group_by(region) %>%
+  mutate(Total=sum(N)) %>%
+  ungroup %>%
+  mutate(sex="Total",
+         percentage=N/Total*100,
+         cohort="TPP") %>%
+  bind_rows(age_ons_total)
 
-age<-  age_sex %>%
-  group_by(cohort,age) %>%
-  summarise(n = sum(abs(n)))%>%
-  mutate(Percentage = round((n/sum(n)),4)*100) %>%
-  ungroup() %>% 
-  mutate(age=factor(age,levels=levels(age_sex_tpp$age)))%>%
-  arrange(cohort,age)
-
-redacted_age <- age %>% mutate_at(vars(n),redactor) %>%
-  mutate(Percentage=case_when(!is.na(n)~Percentage))
+redacted_age <- age %>% mutate_at(vars(N),redactor) %>%
+  mutate(Percentage=case_when(!is.na(N)~percentage))
 
 write_csv(redacted_age,here::here("output", "tables","age_count.csv"))
 
-redacted_age_sex <- age_sex %>% mutate_at(vars(n),redactor) %>%
-  mutate(Percentage=case_when(!is.na(n)~Percentage))
+redacted_age_sex <- age_sex %>% mutate_at(vars(N),redactor) %>%
+  mutate(Percentage=case_when(!is.na(N)~percentage))
 write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the en
+
+################ Ethnicity
+
+eth_ons<-read_csv(here::here("data","ethnicity_ons.csv.gz"))
+
+eth_tpp <- df_input %>%
+  mutate(Ethnic_Group=case_when(
+      ethnicity == "1" ~ "White",
+      ethnicity == "2" ~ "Mixed/multiple ethnic groups",
+      ethnicity == "3" ~ "Asian",
+      ethnicity == "4" ~ "Black",
+      ethnicity == "5" ~ "Other",))  %>%
+  group_by(region,Ethnic_Group) %>%
+  summarise(N=n()) %>%
+  ungroup %>%
+  group_by(region) %>% 
+  mutate(Total = sum(N),
+         percent=N/Total*100,
+         cohort="TPP",
+         group="5_2001")
+
+
+eth_tpp_16 <- df_input %>%
+  mutate(Ethnic_Group=case_when(
+    ethnicity_16 == "1" ~ "British",
+    ethnicity_16 == "2" ~ "Irish",
+    ethnicity_16 == "3" ~ "Other White",
+    ethnicity_16 == "4" ~ "White and Black Caribbean",
+    ethnicity_16 == "5" ~ "White and Black African",
+    ethnicity_16 == "6" ~ "White and Asian",
+    ethnicity_16 == "7" ~ "Other Mixed",
+    ethnicity_16 == "8" ~ "Indian",
+    ethnicity_16 == "9" ~ "Pakistani",
+    ethnicity_16 == "10" ~ "Bangladeshi",
+    ethnicity_16 == "11" ~ "Other Asian",
+    ethnicity_16 == "12" ~ "Caribbean",
+    ethnicity_16 == "13" ~ "African",
+    ethnicity_16 == "14" ~ "Other Black",
+    ethnicity_16 == "15" ~ "Chinese",
+    ethnicity_16 == "16" ~ "Any other ethnic group"))  %>%
+  group_by(region,Ethnic_Group) %>%
+  summarise(N=n()) %>%
+  ungroup %>%
+  group_by(region) %>% 
+  mutate(Total = sum(N),
+         percent=N/Total*100,
+         cohort="TPP",
+         group="16_2001")
+
+ethnicity<-eth_tpp_16 %>%
+  bind_rows(eth_tpp) %>%
+  bind_rows(eth_ons) 
+### Add England
+  ethnicity2 <-ethnicity %>%
+  group_by(group,Ethnic_Group,cohort) %>%
+  summarise(N=sum(N)) %>% 
+  group_by(group,cohort) %>%
+  mutate(N=N,Total=sum(N),percent=N/Total*100, 
+         region="England") %>%
+  bind_rows(ethnicity) %>%
+  mutate(percent=N/Total * 100)
+
+redacted_ethnicity <- ethnicity2 %>% mutate_at(vars(N),redactor) %>%
+  mutate(percent=case_when(!is.na(N)~percent))
+write_csv(redacted_ethnicity,here::here("output", "tables","ethnic_group.csv"))

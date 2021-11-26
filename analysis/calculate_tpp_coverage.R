@@ -1,10 +1,14 @@
 ################################################################################
 # Description: Script to calculate percentage of TPP coverage in ONS population per NUTS1 Region
 #
-# input: 
+# input:  /output/cohorts/input.csv.gz  - pull NUTS1 region for all TPP-registered patients
+#         /output/data/age_ons_sex.csv.gz   - total population ONS estimates per NUTS1 region
+# 
+# output: /output/plots/tpp_coverage_map.svg
+#         /output/tables/tpp_pop_all.csv
 #
 # Author: Colm D Andrews
-# Date: 08/10/2021
+# Date: 26/11/2021
 #
 ################################################################################
 
@@ -29,11 +33,6 @@ options(datatable.old.fread.datetime.character = TRUE)
 #----------------------#
 #    LOAD/CLEAN DATA   #
 #----------------------#
-
-# * input.csv.gz
-#   - pull NUTS1 region for all TPP-registered patients
-# * age_ons_sex.csv.gz 
-#   - total population ONS estimates per NUTS1 region
 
 ## TPP-registered patient records (from study definition)
 ## Include ALL patients with non-missing region in calculation of TPP populations
@@ -64,7 +63,7 @@ n_distinct(input$region)
 #----------------------------------------------------#
 
 tpp_cov<-input %>%
-  # Count records per NuTS1
+  # Count records per Nuts1
   group_by(region) %>%
   tally(name =  "tpp_pop_all") %>%
   ungroup() %>%

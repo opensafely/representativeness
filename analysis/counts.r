@@ -1,21 +1,22 @@
 ################################################################################
 # Description: Script to combine TPP & ONS data for deaths, imd, and age
 #
-# input: /output/cohorts/input.csv.gz
-#        /data/death_ons.csv.gz
-#        /data/imd_ons.csv.gz
-#        /data/age_ons_sex.csv.gz
+# input:  /output/cohorts/input.csv.gz
+#         /data/death_ons.csv.gz
+#         /data/imd_ons.csv.gz
+#         /data/age_ons_sex.csv.gz
+#         /data/ethnicity_ons.csv.gz
 #
 # output: /output/tables/age_sex_count.csv.gz
 #         /output/tables/age_count.csv.gz
 #         /output/tables/death_count.csv.gz
 #         /output/tables/imd_count.csv.gz
+#         /output/tables/ethnic_group.csv
 #
 # Author: Colm D Andrews
-# Date: 08/10/2021
+# Date: 26/11/2021
 #
 ################################################################################
-
 
 ## Redactor code (W.Hulme)
 redactor <- function(n, threshold=6,e_overwrite=NA_integer_){
@@ -43,7 +44,7 @@ library('tidyverse')
 library('sf')
 fs::dir_create(here::here("output", "tables"))
 
-# # import data
+# # import TPP data
 df_input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
   mutate(sex = case_when(sex=="F"~"Female",sex=="M"~"Male",sex=="I"~"I",sex=="U"~"Unknown"))
 

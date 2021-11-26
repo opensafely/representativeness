@@ -2,25 +2,27 @@
 # Description: Script to combine TPP & ONS data for deaths, imd, and age
 ################ RUN LOCALLY ###################################################
 #
-# input: data/populationbyimdenglandandwales2020.xlsx
-#        data/ukpopestimatesmid2020on2021geography.xls
-#        data/ONSdeaths2020.csv (downloaded va Nomis: https://www.nomisweb.co.uk/query/construct/components/apicomponent.aspx?menuopt=1611&subcomp=)
+# input:  downloaded va Nomis:(https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=)
+#        data/upopulationbyimdenglandandwales2020.xlsx
+#        data/nomis_2021_11_22_110504.xlsx
+#        data/nomis_2021_11_22_104904.xlsx
+#        data/nomis_2021_11_22_213653.xlsx
 #
 # output: /data/death_ons.csv.gz
 #         /data/imd_ons.csv.gz
 #         /data/age_ons_sex.csv.gz
+#         /data/ethnicity_ons.csv.gz
 #
 # Author: Colm D Andrews
-# Date: 14/10/2021
+# Date: 26/11/2021
 #
 ################################################################################
-msoa_map<-read_csv(here::here("data","ONS_MSOA_to_region_map.csv")) %>%
-  select(MSOA11CD,RGN11NM)
-  
+
 library("readxl")
 library("tidyverse")
 
 ############## IMD
+# ONS data downloaded va Nomis:(https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=)
 input_imd_ons<-read_excel(here::here("data","populationbyimdenglandandwales2020.xlsx"),sheet="Table 1 - England",skip = 2) 
 
 imd_sex_ons<-input_imd_ons %>% rename("sex"=1,"imd"=2) %>% mutate(Total=rowSums(across(!imd & !sex))) %>%
@@ -40,6 +42,7 @@ write_csv(imd_ons,here::here("data","imd_ons.csv.gz"))  ####add .gz to the end
 
 
 ############### age
+# ONS data downloaded va Nomis:(https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=)
 # male
 age_ons_male<-read_excel(here::here("data","nomis_2021_11_22_110504.xlsx"),skip = 108,n_max = 93)
 
@@ -75,6 +78,7 @@ age_ons_female<-age_ons_female  %>% filter(Age!="All Ages") %>%
           age_group = cut(Age, breaks = seq(0,95,5), right = F, labels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")),
           sex="Female",
           cohort="ONS") 
+
 ### Combined
 age_ons<-read_excel(here::here("data","nomis_2021_11_22_110504.xlsx"),skip = 6,n_max = 93)
 
@@ -98,7 +102,7 @@ age_ons<-age_ons  %>% filter(Age!="All Ages") %>%
 write_csv(age_ons,here::here("data","age_ons_sex.csv.gz"))  ####add .gz to the end
 
 ###### death
-###### ONS data downloaded va Nomis: https://www.nomisweb.co.uk/query/construct/components/apicomponent.aspx?menuopt=1611&subcomp=
+# ONS data downloaded va Nomis:(https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=)
 death_ons<-read_excel(here::here("data","nomis_2021_11_22_104904.xlsx"),skip = 8)
 ons_total<-read_excel(here::here("data","nomis_2021_11_22_104904.xlsx"),skip = 8,n_max = 1) %>%
     select(-`cause of death`,-starts_with("Wales")) %>%
@@ -111,9 +115,7 @@ death_ons<-death_ons %>% rename("cod"=1) %>%
   mutate(England=rowSums(across(where(is.numeric))), 
          Cause_of_Death=str_split(cod, " ", 2),
          Cause_of_Death=sapply(Cause_of_Death,"[",2)) %>%
- # bind_cols(ons_total) %>%
-#  mutate_at(vars(East:England), funs("percent" = ./Total*100)) %>%
-            select(-cod,-starts_with("Wales")) %>%
+  select(-cod,-starts_with("Wales")) %>%
   pivot_longer(!Cause_of_Death, names_to = "Region",values_to ="N" ) %>% 
   full_join(ons_total,by="Region") %>%
   mutate(percent=N/Total*100) %>%
@@ -121,9 +123,8 @@ death_ons<-death_ons %>% rename("cod"=1) %>%
 
 write_csv(death_ons,here::here("data","death_ons.csv.gz"))  ####add .gz to the end
 
-
 ######### Ethnicity
-
+# ONS data downloaded va Nomis:(https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=)
 eth_ons<-read_excel(here::here("data","nomis_2021_11_22_213653.xlsx"),skip = 8,n_max = 19) %>%
   mutate(Ethnic_Group=str_split(`Ethnic Group`, ": ", 2),
          Ethnic_Group=sapply(Ethnic_Group,"[",2),

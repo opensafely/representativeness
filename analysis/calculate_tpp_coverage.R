@@ -1,5 +1,5 @@
 ################################################################################
-# Description: Script to calculate TPP coverage per MSOA and ONS population estimates per MSOA
+# Description: Script to calculate percentage of TPP coverage in ONS population per NUTS1 Region
 #
 # input: 
 #
@@ -22,30 +22,26 @@ library(dtplyr)
 fs::dir_create(here::here("output", "plots"))
 fs::dir_create(here::here("output", "tables"))
 
-
 theme_set(theme_minimal())
 options(datatable.old.fread.datetime.character = TRUE)
-
 # ---------------------------------------------------------------------------- #
 
 #----------------------#
 #    LOAD/CLEAN DATA   #
 #----------------------#
 
-# * input.csv 
-#   - pull MSOA for all TPP-registered patients
-# * msoa_pop.csv 
-#   - total population estimates per MSOA
-#   - population estimates by single year age
-# 
+# * input.csv.gz
+#   - pull NUTS1 region for all TPP-registered patients
+# * age_ons_sex.csv.gz 
+#   - total population ONS estimates per NUTS1 region
 
 ## TPP-registered patient records (from study definition)
-## Include ALL patients with non-missing MSOA in calculation of TPP populations
+## Include ALL patients with non-missing region in calculation of TPP populations
 input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
   # Remove individuals w missing region
   filter(!is.na(region))
 
-## National MSOA population estimates (ONS mid-2020):
+## National NUTS1 population estimates (ONS mid-2020):
 nuts1_pop <- read_csv(here::here("data","age_ons_sex.csv.gz"),n_max=9) %>%
   select(Region,Total) %>%
   rename("region"="Region")
@@ -53,14 +49,13 @@ nuts1_pop <- read_csv(here::here("data","age_ons_sex.csv.gz"),n_max=9) %>%
 # ---------------------------------------------------------------------------- #
 
 print("No. Regions in England:")
-n_distinct(nuts1_pop$nuts1code)
+n_distinct(nuts1_pop$region)
 
 print("No. TPP-registered patients with non-missing Regions:")
 nrow(input)
 
 print("No. unique Regions with patients registered in TPP:")
-n_distinct(input$Region)
-
+n_distinct(input$region)
 
 # ---------------------------------------------------------------------------- #
 
@@ -69,7 +64,7 @@ n_distinct(input$Region)
 #----------------------------------------------------#
 
 tpp_cov<-input %>%
-  # Count records per MSOA
+  # Count records per NuTS1
   group_by(region) %>%
   tally(name =  "tpp_pop_all") %>%
   ungroup() %>%
@@ -98,28 +93,21 @@ summary(tpp_cov)
 write_csv(tpp_cov, here::here("output", "tables","tpp_pop_all.csv"))
 
 ################################################################################
-
-
-
+#----------------------#
+#       FIGURES        #
+#----------------------#
 ## Load shapefiles
 nuts_shp<-st_read("data/NUTS_Level_1_(January_2018)_Boundaries.shp")
 saveRDS(nuts_shp,here::here("data", "nuts_shp.rds"))
 nuts_shp<-readRDS(here::here("data", "nuts_shp.rds"))
 
-  coverage_plot<-nuts_shp %>%
+coverage_plot<-nuts_shp %>%
   filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%
     left_join(tpp_cov,by="nuts118cd") %>%
     ggplot(aes(geometry = geometry,fill=tpp_cov_all)) +
     geom_sf(lwd = 0, colour='grey') +
-    scale_fill_gradient2(midpoint = 100, high = "navyblue", mid = "indianred", low = "ivory1",na.value = "white") +
+    scale_fill_gradient2(midpoint = median(tpp_cov$tpp_cov_all), high = "navyblue", mid = "indianred", low = "ivory1",na.value = "white") +
     theme(legend.position = c(0.2,0.9),panel.background=element_rect(fill="lightblue"))
   
-# ---------------------------------------------------------------------------- #
-
-#----------------------#
-#       FIGURES        #
-#----------------------#
-
-  
-  ggsave(filename=here::here("output", "plots","tpp_coverage_map.svg"),coverage_plot)
+ggsave(filename=here::here("output", "plots","tpp_coverage_map.svg"),coverage_plot)
 

@@ -85,7 +85,8 @@ TPP_death<-TPP_death %>%
   bind_rows(TPP_death)  %>%
   mutate(percent=N/total*100,
          cohort="TPP") %>%
-  select(-total)
+  select(-total) %>%
+  drop_na(Cause_of_Death)
 
   
 ###### combine TPP and ONS data
@@ -234,7 +235,7 @@ ethnicity<-eth_tpp_16 %>%
   mutate(N=N,Total=sum(N),percent=N/Total*100, 
          region="England") %>%
   bind_rows(ethnicity) %>%
-  mutate(percent=N/Total * 100)
+  mutate(percent=N/Total * 100) 
 
 redacted_ethnicity <- ethnicity2 %>% mutate_at(vars(N),redactor) %>%
   mutate(percent=case_when(!is.na(N)~percent))

@@ -5,11 +5,13 @@
 #        /data/death_ons.csv.gz
 #        /data/imd_ons.csv.gz
 #        /data/age_ons_sex.csv.gz
+#        /data/ethnicity_ons.csv.gz
 #
 # output: /output/tables/age_sex_count.csv.gz
 #         /output/tables/age_count.csv.gz
 #         /output/tables/death_count.csv.gz
 #         /output/tables/imd_count.csv.gz
+#         /output/tables/ethnic_group.csv
 #
 # Author: Colm D Andrews
 # Date: 29/11/2021
@@ -99,8 +101,6 @@ write_csv(redacted_deaths,here::here("output", "tables","death_count.csv"))  ###
 
 imd_ons<-read_csv(here::here("data","imd_ons.csv.gz")) 
 
-
-
 imd_sex<-df_input %>%
   group_by(imd,sex) %>% summarise(Total = n()) 
 
@@ -179,8 +179,6 @@ write_csv(redacted_age,here::here("output", "tables","age_count.csv"))
 redacted_age_sex <- age_sex %>% mutate_at(vars(N),redactor) %>%
   mutate(Percentage=case_when(!is.na(N)~percentage))
 write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the en
-
-
 
 ################ Ethnicity
 

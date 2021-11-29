@@ -1,22 +1,21 @@
 ################################################################################
 # Description: Script to combine TPP & ONS data for deaths, imd, and age
 #
-# input:  /output/cohorts/input.csv.gz
-#         /data/death_ons.csv.gz
-#         /data/imd_ons.csv.gz
-#         /data/age_ons_sex.csv.gz
-#         /data/ethnicity_ons.csv.gz
+# input: /output/cohorts/input.csv.gz
+#        /data/death_ons.csv.gz
+#        /data/imd_ons.csv.gz
+#        /data/age_ons_sex.csv.gz
 #
 # output: /output/tables/age_sex_count.csv.gz
 #         /output/tables/age_count.csv.gz
 #         /output/tables/death_count.csv.gz
 #         /output/tables/imd_count.csv.gz
-#         /output/tables/ethnic_group.csv
 #
 # Author: Colm D Andrews
-# Date: 26/11/2021
+# Date: 29/11/2021
 #
 ################################################################################
+
 
 ## Redactor code (W.Hulme)
 redactor <- function(n, threshold=6,e_overwrite=NA_integer_){
@@ -39,14 +38,17 @@ print("redactor function")
 
 agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
+
 ## import libraries
 library('tidyverse')
 library('sf')
 fs::dir_create(here::here("output", "tables"))
 
-# # import TPP data
+# # import data
 df_input <- read_csv(here::here("output", "cohorts","input.csv.gz")) %>%
   mutate(sex = case_when(sex=="F"~"Female",sex=="M"~"Male",sex=="I"~"I",sex=="U"~"Unknown"))
+
+
 
 ###################################### deaths
 ##import ONS death data
@@ -61,50 +63,15 @@ TPP_death <- df_input %>%
     # extract relevant parts of the ICD-10 codes to classify deaths
           cause_chapter = str_sub(died_cause_ons,1,1), 
           cause =str_sub(died_cause_ons,1,3), 
-    # create specific causes of death to match K Baskharan's analysis
-    # assumes COVID-19 if more than one primary/underlying 
-          Broad_Cause_of_Death = case_when(
-                  cause_chapter == "C" ~ "Cancer",
-                  cause_chapter == "I" ~ "Cardiovascular Disease",
-                  cause_chapter == "J" ~ "Respiratory Disease",
-                  # dementia codes should be F01, F02, F03 and G30     
-                  cause >= "F0" & cause_chapter <"F4" ~ 'Dementia', 
-                  cause == "G30" ~ 'Dementia', 
-                  died_ons_covid_flag_any == 1 ~ "COVID-19", 
-                  TRUE ~ "Other"),
-          Broad_Cause_of_Death = factor(Broad_Cause_of_Death, levels = c("Respiratory Disease", "Dementia", "Cardiovascular Disease", "Cancer", "Other", "COVID-19")),
           Cause_of_Death = case_when( 
-                  # cause == "C15" ~ "Malignant neoplasm of oesophagus",
-                  # cause == "C16" ~ "Malignant neoplasm of stomach",
-                  # cause == "C18" ~ "Malignant neoplasm of colon",
-                  # cause >= "C19" & cause <="C21" ~ "Malignant neoplasm of rectosigmoid junction, rectum and anus",
-                  # cause == "C25" ~ "Malignant neoplasm of pancreas",
                   cause >= "C33" & cause <="C34" ~ "Malignant neoplasm of trachea, bronchus and lung",
-                  # cause == "C43" ~ "Malignant melanoma of the skin",
-                  # cause == "C44" ~ "Other malignant neoplasms of skin",
-                  # cause == "C50" ~ "Malignant neoplasm of breast",
-                  # cause == "C53" ~ "Malignant neoplasm of cervix uteri",
-                  # cause == "C61" ~ "Malignant neoplasm of prostate",
-                  # cause == "C67" ~ "Malignant neoplasm of bladder",
-                  # cause >= "C91" & cause <="C95" ~ "Leukaemia",
-                  # cause >= "E10" & cause <="E14" ~ "Diabetes mellitus",
-                  # cause >= "F01" & cause <="F03" ~ "Dementias",
-                  # cause == "G30" ~ "Alzheimer disease",
-                    cause >= "I20" & cause <="I25" ~ "Ischaemic heart diseases",
-                   cause >= "I60" & cause <="I69" ~ "Cerebrovascular diseases",
-                  # cause >= "J12" & cause <="J18" ~ "Pneumonia",
-                  # cause >= "J40" & cause <="J44" ~ "Bronchitis, emphysema and other chronic obstructive pulmonary disease",
-                  # cause >= "K25" & cause <="K27" ~ "Gastric and duodenal ulcer",
-                  # cause >= "K70" & cause <="K77" ~ "Diseases of liver",
-                  # cause >= "V01" & cause <="V89" ~ "Land transport accidents",
-                  # cause >= "X60" & cause <="X84" ~ "Intentional self-harm",
-                  # cause >= "Y10" & cause <="Y34" ~ "Event of undetermined intent",
+                  cause >= "I20" & cause <="I25" ~ "Ischaemic heart diseases",
+                  cause >= "I60" & cause <="I69" ~ "Cerebrovascular diseases",
                   cause == "U07" |cause == "U10.9" ~ "COVID-19",
                   (cause >= "F01" & cause <="F03") | cause == "G30" ~ "Dementia and Alzheimer disease",
                  )) %>%
-      drop_na(Cause_of_Death) %>%
-  group_by(region) %>%
-  mutate(Total=sum(died_any)) %>%
+    group_by(region) %>%
+    mutate(Total=sum(died_any)) %>%
   ungroup() %>%
   group_by(region,Cause_of_Death) %>%
   summarise(N=n(),total=mean(Total))
@@ -187,6 +154,9 @@ age_sex_tpp <-age_sex_tpp %>%
   bind_rows(age_ons_sex) %>%
     filter(sex=="Male" | sex=="Female")
 
+  
+#agelevels<-levels(age_sex_tpp$age)
+#saveRDS(agelevels, here::here("output", "tables","levels.RData"))
 age_ons_total<-age_ons_sex %>%
   filter(sex=="Total")
   
@@ -209,6 +179,8 @@ write_csv(redacted_age,here::here("output", "tables","age_count.csv"))
 redacted_age_sex <- age_sex %>% mutate_at(vars(N),redactor) %>%
   mutate(Percentage=case_when(!is.na(N)~percentage))
 write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the en
+
+
 
 ################ Ethnicity
 

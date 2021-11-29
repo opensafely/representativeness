@@ -148,15 +148,10 @@ age_sex_tpp <-age_sex_tpp %>%
   mutate(percentage=N/Total * 100,
          cohort="TPP")
 
-
-
   age_sex <- age_sex_tpp %>%        
   bind_rows(age_ons_sex) %>%
     filter(sex=="Male" | sex=="Female")
 
-  
-#agelevels<-levels(age_sex_tpp$age)
-#saveRDS(agelevels, here::here("output", "tables","levels.RData"))
 age_ons_total<-age_ons_sex %>%
   filter(sex=="Total")
   

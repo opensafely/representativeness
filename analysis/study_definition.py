@@ -86,10 +86,9 @@ study = StudyDefinition(
     died_any=patients.died_from_any_cause(
         between=[index_date,end_date],
         returning="binary_flag",
-        date_format="YYYY-MM-DD",
         return_expectations={
-            "date": {"earliest" : index_date},
-            "rate" : "exponential_increase"
+            "rate" : "exponential_increase",
+            "incidence": 0.4,
         },
     ),
 

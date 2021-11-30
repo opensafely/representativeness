@@ -78,6 +78,8 @@ tpp_cov<-input %>%
                                region=="South East"~"UKJ",
                                region=="South West"~"UKK"),
          region = as.factor(region),
+         tpp_pop_all=round(tpp_pop_all/5)*5,
+         Total=round(Total/5)*5,
          tpp_cov_all = tpp_pop_all*100/Total)
 
 

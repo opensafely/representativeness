@@ -18,26 +18,6 @@
 #
 ################################################################################
 
-
-## Redactor code (W.Hulme)
-redactor <- function(n, threshold=6,e_overwrite=NA_integer_){
-  # given a vector of frequencies, this returns a boolean vector that is TRUE if
-  # a) the frequency is <= the redaction threshold and
-  # b) if the sum of redacted frequencies in a) is still <= the threshold, then the
-  # next largest frequency is also redacted
-  n <- as.integer(n)
-  leq_threshold <- dplyr::between(n, 1, threshold)
-  n_sum <- sum(n)
-  # redact if n is less than or equal to redaction threshold
-  redact <- leq_threshold
-  # also redact next smallest n if sum of redacted n is still less than or equal to threshold
-  if((sum(n*leq_threshold) <= threshold) & any(leq_threshold)){
-    redact[which.min(dplyr::if_else(leq_threshold, n_sum+1L, n))] = TRUE
-  }
-  n_redacted <- if_else(redact, e_overwrite, n)
-}
-print("redactor function")
-
 agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
 
@@ -76,56 +56,60 @@ TPP_death <- df_input %>%
     mutate(Total=sum(died_any)) %>%
   ungroup() %>%
   group_by(region,Cause_of_Death) %>%
-  summarise(N=n(),total=mean(Total))
+  summarise(N=n(),Total=mean(Total))
 
 TPP_death<-TPP_death %>%
   group_by(Cause_of_Death) %>%
-  summarise(N=sum(N),total=sum(total)) %>%
+  summarise(N=sum(N),Total=sum(Total)) %>%
   mutate(region="England") %>%
   bind_rows(TPP_death)  %>%
-  mutate(percent=N/total*100,
-         cohort="TPP") %>%
-  select(-total) %>%
+  mutate(cohort="TPP") %>%
   drop_na(Cause_of_Death)
 
   
-###### combine TPP and ONS data
+###### combine TPP and ONS data & use rounding
 deaths <- TPP_death %>% 
-bind_rows(death_ons)
+bind_rows(death_ons) %>%
+  mutate(N=round(N/5)*5,
+         Total=round(Total/5)*5,
+         percentage=N/Total*100)
 
-redacted_deaths <- deaths %>% mutate_at(vars(N),redactor) %>%
-  mutate(percent=case_when(!is.na(N)~percent))
-write_csv(redacted_deaths,here::here("output", "tables","death_count.csv"))  ####add .gz to the end
-
+write_csv(deaths,here::here("output", "tables","death_count.csv"))  ####add .gz to the end
 
 ############################# imd ###################################################
 
 imd_ons<-read_csv(here::here("data","imd_ons.csv.gz")) 
 
 imd_sex<-df_input %>%
-  group_by(imd,sex) %>% summarise(Total = n()) 
+  group_by(imd,sex) %>% summarise(N = n()) 
 
 imd<-imd_sex%>%
   group_by(imd) %>%
-  summarise(Total=sum(Total)) %>%
+  summarise(N=sum(N)) %>%
   mutate(sex="Total") %>% bind_rows(imd_sex) %>%
   mutate(cohort="TPP")  %>% 
   bind_rows(imd_ons)%>%
   group_by(sex,cohort) %>%
-  mutate(Percentage = round((Total/sum(Total))*100,4)) %>%
+  mutate(Total=sum(N),
+         N=round(N/5)*5,
+         Total=round(Total/5)*5,
+         percentage = round(N/Total*100,4)) %>%
   ungroup() %>% arrange(cohort,sex,imd) %>%
-  mutate(imd = case_when(imd==1~"1: Most deprived",imd==2~"2",imd==3~"3",imd==4~"4",imd==0~"Unknown",imd==5~"5: Least deprived"))
+  mutate(imd = case_when(imd==1~"1: Most deprived",
+                         imd==2~"2",
+                         imd==3~"3",
+                         imd==4~"4",
+                         imd==0~"Unknown",
+                         imd==5~"5: Least deprived"))
 
-
-redacted_imd <- imd %>% mutate_at(vars(Total),redactor) %>%
-  mutate(Percentage=case_when(!is.na(Total)~Percentage))
-
-write_csv(redacted_imd,here::here("output", "tables","imd_count.csv"))  ####add .gz to the end
+write_csv(imd,here::here("output", "tables","imd_count.csv"))  ####add .gz to the end
 
 ############################################## age
 age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) %>%
   group_by(age_group,sex,Region) %>% 
-  summarise(N = sum(N),Total=sum(Total),percentage=sum(percentage)) %>%
+  summarise(N = sum(N),
+            Total=sum(Total),
+            percentage=sum(percentage)) %>%
   rename("region"="Region") %>%
   mutate(cohort="ONS")
 
@@ -146,12 +130,15 @@ age_sex_tpp <-age_sex_tpp %>%
     mutate(Total=sum(N), 
             region="England") %>%
   bind_rows(age_sex_tpp) %>%
-  mutate(percentage=N/Total * 100,
-         cohort="TPP")
+  mutate(cohort="TPP")
 
-  age_sex <- age_sex_tpp %>%        
+age_sex <- age_sex_tpp %>%        
   bind_rows(age_ons_sex) %>%
-    filter(sex=="Male" | sex=="Female")
+  filter(sex=="Male" | sex=="Female") %>%
+  ## add rounding
+  mutate(N=round(N/5)*5,
+           Total=round(Total/5)*5,
+           percentage=N/Total*100) 
 
 age_ons_total<-age_ons_sex %>%
   filter(sex=="Total")
@@ -162,19 +149,17 @@ age<-  age_sex_tpp %>%
   group_by(region) %>%
   mutate(Total=sum(N)) %>%
   ungroup %>%
+  mutate(cohort="TPP") %>%
+  bind_rows(age_ons_total) %>%
   mutate(sex="Total",
-         percentage=N/Total*100,
-         cohort="TPP") %>%
-  bind_rows(age_ons_total)
+         ## add rounding
+         N=round(N/5)*5,
+         Total=round(Total/5)*5,
+         percentage=N/Total*100) 
 
-redacted_age <- age %>% mutate_at(vars(N),redactor) %>%
-  mutate(Percentage=case_when(!is.na(N)~percentage))
+write_csv(age,here::here("output", "tables","age_count.csv"))
 
-write_csv(redacted_age,here::here("output", "tables","age_count.csv"))
-
-redacted_age_sex <- age_sex %>% mutate_at(vars(N),redactor) %>%
-  mutate(Percentage=case_when(!is.na(N)~percentage))
-write_csv(redacted_age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the en
+write_csv(age_sex,here::here("output", "tables","age_sex_count.csv"))  ####add .gz to the en
 
 ################ Ethnicity
 
@@ -192,7 +177,6 @@ eth_tpp <- df_input %>%
   ungroup %>%
   group_by(region) %>% 
   mutate(Total = sum(N),
-         percent=N/Total*100,
          cohort="TPP",
          group="5_2001")
 
@@ -220,7 +204,6 @@ eth_tpp_16 <- df_input %>%
   ungroup %>%
   group_by(region) %>% 
   mutate(Total = sum(N),
-         percent=N/Total*100,
          cohort="TPP",
          group="16_2001")
 
@@ -232,11 +215,13 @@ ethnicity<-eth_tpp_16 %>%
   group_by(group,Ethnic_Group,cohort) %>%
   summarise(N=sum(N)) %>% 
   group_by(group,cohort) %>%
-  mutate(N=N,Total=sum(N),percent=N/Total*100, 
+  mutate(N=N,
+         Total=sum(N),
          region="England") %>%
   bind_rows(ethnicity) %>%
-  mutate(percent=N/Total * 100) 
+    ## add rounding
+  mutate(N=round(N/5)*5,
+         Total=round(Total/5)*5,
+         percentage=N/Total * 100) 
 
-redacted_ethnicity <- ethnicity2 %>% mutate_at(vars(N),redactor) %>%
-  mutate(percent=case_when(!is.na(N)~percent))
-write_csv(redacted_ethnicity,here::here("output", "tables","ethnic_group.csv"))
+write_csv(ethnicity2,here::here("output", "tables","ethnic_group.csv"))

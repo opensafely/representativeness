@@ -25,18 +25,19 @@ library("tidyverse")
 # ONS data downloaded va Nomis:(https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=)
 input_imd_ons<-read_excel(here::here("data","populationbyimdenglandandwales2020.xlsx"),sheet="Table 1 - England",skip = 2) 
 
-imd_sex_ons<-input_imd_ons %>% rename("sex"=1,"imd"=2) %>% mutate(Total=rowSums(across(!imd & !sex))) %>%
-  select(sex,imd,Total) %>% drop_na(Total) %>% fill(sex) %>% 
+imd_sex_ons<-input_imd_ons %>% rename("sex"=1,"imd"=2) %>% 
+  mutate(N=rowSums(across(!imd & !sex))) %>%
+  select(sex,imd,N) %>% drop_na(N) %>% fill(sex) %>% 
   mutate(imd = case_when(row_number() %% 2==1~(imd+1)/2,row_number() %% 2==0~imd/2,)) %>%
   group_by(sex,imd) %>%
-  summarise(Total=sum(Total))
+  summarise(N=sum(N))
 
 imd_ons<-imd_sex_ons %>%
   group_by(imd) %>%
-  summarise(Total=sum(Total)) %>%
-  mutate(sex="Total") %>% bind_rows(imd_sex_ons) %>%
+  summarise(N=sum(N)) %>%
+  mutate(sex="Total") %>% 
+  bind_rows(imd_sex_ons) %>%
   mutate(cohort="ONS")
-
 
 write_csv(imd_ons,here::here("data","imd_ons.csv.gz"))  ####add .gz to the end
 
@@ -117,9 +118,7 @@ death_ons<-death_ons %>% rename("cod"=1) %>%
          Cause_of_Death=sapply(Cause_of_Death,"[",2)) %>%
   select(-cod,-starts_with("Wales")) %>%
   pivot_longer(!Cause_of_Death, names_to = "Region",values_to ="N" ) %>% 
-  full_join(ons_total,by="Region") %>%
-  mutate(percent=N/Total*100) %>%
-  select(-Total)
+  full_join(ons_total,by="Region") 
 
 write_csv(death_ons,here::here("data","death_ons.csv.gz"))  ####add .gz to the end
 
@@ -148,7 +147,7 @@ eth_16_ons<-eth_ons %>%
   summarise(N=sum(N)) %>%
   group_by(region) %>%
   mutate(Total=sum(N),
-         percent=N/Total*100,
+         percentage=N/Total*100,
          group="16_2001")
 
 eth_5_ons<-eth_ons %>%
@@ -158,7 +157,7 @@ eth_5_ons<-eth_ons %>%
   summarise(N=sum(N)) %>%
   group_by(region) %>%
   mutate(Total=sum(N),
-         percent=N/Total*100,
+         percentage=N/Total*100,
          group="5_2001") %>%
   rename("Ethnic_Group" = "Ethnic_Group5")
 

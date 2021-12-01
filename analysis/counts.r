@@ -108,8 +108,9 @@ write_csv(imd,here::here("output", "tables","imd_count.csv"))  ####add .gz to th
 age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) %>%
   group_by(age_group,sex,Region) %>% 
   summarise(N = sum(N),
-            Total=sum(Total),
+            Total=Total,
             percentage=sum(percentage)) %>%
+  distinct() %>%
   rename("region"="Region") %>%
   mutate(cohort="ONS")
 

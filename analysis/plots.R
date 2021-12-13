@@ -7,19 +7,19 @@
 #         /output/tables/imd_count.csv.gz
 #         /output/tables/ethnic_group.csv
 #
-# output: output/plots/Cause_of_Death_count.svg
-#         output/plots/Cause_of_Death_count_eng.svg
-#         output/plots/imd_count.svg
-#         output/plots/age_sex_count.svg
-#         output/plots/age_sex_count_eng.svg
-#         output/plots/age_count.svg
-#         output/plots/age_count_eng.svg
-#         output/plots/sex_count.svg
-#         output/plots/sex_count_eng.svg
-#         output/plots/ethnicity_count.svg
-#         output/plots/ethnicity_count_eng.svg
-#         output/plots/ethnicity16_count.svg
-#         output/plots/ethnicity16_count_eng.svg
+# output: output/plots/Cause_of_Death_count.tiff
+#         output/plots/Cause_of_Death_count_eng.tiff
+#         output/plots/imd_count.tiff
+#         output/plots/age_sex_count.tiff
+#         output/plots/age_sex_count_eng.tiff
+#         output/plots/age_count.tiff
+#         output/plots/age_count_eng.tiff
+#         output/plots/sex_count.tiff
+#         output/plots/sex_count_eng.tiff
+#         output/plots/ethnicity_count.tiff
+#         output/plots/ethnicity_count_eng.tiff
+#         output/plots/ethnicity16_count.tiff
+#         output/plots/ethnicity16_count_eng.tiff
 # 
 # Author: Colm D Andrews
 # Date:   26/11/2021
@@ -42,14 +42,14 @@ death_plot<-death %>%
   ggplot(aes(x=Cause_of_Death, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
     theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all deaths")
 
-ggsave(filename=here::here("output", "plots","Cause_of_Death_count.svg"),death_plot,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","Cause_of_Death_count.tiff"),death_plot,width = 30, height = 30, units = "cm")
 
 death_plot_eng<-death %>%
   filter(region=="England") %>%
   ggplot(aes(x=Cause_of_Death, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
     theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all deaths")
 
-ggsave(filename=here::here("output", "plots","Cause_of_Death_count_eng.svg"),death_plot_eng,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","Cause_of_Death_count_eng.tiff"),death_plot_eng,width = 30, height = 30, units = "cm")
 
 ##################################### imd
 imd<-read_csv(here::here("output", "tables","imd_count.csv"))
@@ -58,7 +58,7 @@ imd_plot<-imd %>% filter(sex=="Total") %>%
   ggplot(aes(x=imd, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
     theme_classic() + theme(axis.text.x = element_text( hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of Population")
 
-ggsave(filename=here::here("output", "plots","imd_count.svg"),imd_plot)
+ggsave(filename=here::here("output", "plots","imd_count.tiff"),imd_plot)
 
 ################################################ age by sex
 age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv"))
@@ -78,7 +78,7 @@ age_sex_plot<-age_sex %>%
    theme_bw() + theme(text = element_text(size=16)) + scale_x_discrete(limits = agelevels) +
    xlab("") + ylab(" % of cohort") 
   
-ggsave(filename=here::here("output", "plots","age_sex_count.svg"),age_sex_plot,width = 60, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","age_sex_count.tiff"),age_sex_plot,width = 60, height = 30, units = "cm")
 
 age_sex_plot_eng<-age_sex %>%
   filter(cohort=="ONS",region=="England") %>%
@@ -91,7 +91,7 @@ age_sex_plot_eng<-age_sex %>%
     theme_bw() + theme(text = element_text(size=16)) + scale_x_discrete(limits = agelevels) +
     xlab("") + ylab(" % of cohort") 
 
-ggsave(filename=here::here("output", "plots","age_sex_count_eng.svg"),age_sex_plot_eng,width = 20, height = 15, units = "cm")
+ggsave(filename=here::here("output", "plots","age_sex_count_eng.tiff"),age_sex_plot_eng,width = 20, height = 15, units = "cm")
 
 ################################################ age
 
@@ -105,7 +105,7 @@ age_plot <-age %>%
         xlab("") + ylab(" % of cohort") + 
         scale_x_discrete(limits = agelevels)
 
-ggsave(filename=here::here("output", "plots","age_count.svg"),age_plot,width = 60, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","age_count.tiff"),age_plot,width = 60, height = 30, units = "cm")
 
 age_plot_eng <-age %>%
   filter(region=="England") %>%
@@ -114,7 +114,7 @@ age_plot_eng <-age %>%
     xlab("") + ylab(" % of cohort") + 
     scale_x_discrete(limits = agelevels)
 
-ggsave(filename=here::here("output", "plots","age_count_eng.svg"),age_plot_eng,width = 15, height = 10, units = "cm")
+ggsave(filename=here::here("output", "plots","age_count_eng.tiff"),age_plot_eng,width = 15, height = 10, units = "cm")
 
 ############################################## sex
 sex<-age_sex %>%
@@ -132,7 +132,7 @@ sex_plot<-sex %>%
     theme_classic() + theme(axis.text.x = element_text(size=16,angle = 90,hjust=0.95,vjust=0.2)) + 
     xlab("") + ylab(" % of cohort")
 
-ggsave(filename=here::here("output", "plots","sex_count.svg"),sex_plot,width = 30, height = 15, units = "cm")
+ggsave(filename=here::here("output", "plots","sex_count.tiff"),sex_plot,width = 30, height = 15, units = "cm")
 
 
 sex_plot_eng<-sex %>% 
@@ -141,7 +141,7 @@ sex_plot_eng<-sex %>%
     theme_classic() + theme(axis.text.x = element_text(size=16,angle = 90,hjust=0.95,vjust=0.2)) + 
     xlab("") + ylab(" % of cohort")
 
-ggsave(filename=here::here("output", "plots","sex_count_eng.svg"),sex_plot_eng,width = 15, height = 10, units = "cm")
+ggsave(filename=here::here("output", "plots","sex_count_eng.tiff"),sex_plot_eng,width = 15, height = 10, units = "cm")
 
 ############### ethnicity
 ethnicity<-read_csv(here::here("output", "tables","ethnic_group.csv"))
@@ -151,14 +151,14 @@ ethnicity_plot<-ethnicity %>%
   ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
     theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
 
-ggsave(filename=here::here("output", "plots","ethnicity_count.svg"),ethnicity_plot,width = 45, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity_count.tiff"),ethnicity_plot,width = 45, height = 30, units = "cm")
 
 ethnicity_plot_eng<-ethnicity %>%
   filter(region=="England",group=="5_2001") %>%
   ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
     theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
 
-ggsave(filename=here::here("output", "plots","ethnicity_count_eng.svg"),ethnicity_plot_eng,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity_count_eng.tiff"),ethnicity_plot_eng,width = 30, height = 30, units = "cm")
 
 
 ethnicity_plot16<-ethnicity %>%
@@ -166,11 +166,11 @@ ethnicity_plot16<-ethnicity %>%
   ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
     theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
 
-ggsave(filename=here::here("output", "plots","ethnicity16_count.svg"),ethnicity_plot16,width = 45, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity16_count.tiff"),ethnicity_plot16,width = 45, height = 30, units = "cm")
 
 ethnicity_plot16_eng<-ethnicity %>%
   filter(region=="England",group=="16_2001") %>%
   ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
     theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
 
-ggsave(filename=here::here("output", "plots","ethnicity16_count_eng.svg"),ethnicity_plot16_eng,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity16_count_eng.tiff"),ethnicity_plot16_eng,width = 30, height = 30, units = "cm")

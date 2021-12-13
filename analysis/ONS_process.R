@@ -3,7 +3,7 @@
 ################ RUN LOCALLY ###################################################
 #
 # input:  downloaded va Nomis:(https://www.nomisweb.co.uk/query/select/getdatasetbytheme.asp?opt=3&theme=&subgrp=)
-#        data/upopulationbyimdenglandandwales2020.xlsx
+#        data/populationbyimdenglandandwales2020.xlsx
 #        data/nomis_2021_11_22_110504.xlsx
 #        data/nomis_2021_11_22_104904.xlsx
 #        data/nomis_2021_11_22_213653.xlsx

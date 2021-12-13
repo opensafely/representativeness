@@ -4,7 +4,7 @@
 # input:  /output/cohorts/input.csv.gz  - pull NUTS1 region for all TPP-registered patients
 #         /output/data/age_ons_sex.csv.gz   - total population ONS estimates per NUTS1 region
 # 
-# output: /output/plots/tpp_coverage_map.tiff
+# output: /output/plots/tpp_coverage_map.jpg
 #         /output/tables/tpp_pop_all.csv
 #
 # Author: Colm D Andrews
@@ -116,5 +116,5 @@ coverage_plot<-nuts_shp %>%
       xlab("Longitude") + ylab("Latitude")
   
     
-ggsave(filename=here::here("output", "plots","tpp_coverage_map.tiff"),coverage_plot,width = 20,height = 20, units = "cm")
+ggsave(filename=here::here("output", "plots","tpp_coverage_map.jpg"),coverage_plot,width = 20,height = 20, units = "cm")
 

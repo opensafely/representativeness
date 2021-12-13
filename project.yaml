@@ -28,19 +28,19 @@ actions:
     needs: [counts]
     outputs:
       moderately_sensitive:
-        figure1: output/plots/Cause_of_Death_count.tiff
-        figure2: output/plots/imd_count.tiff
-        figure3: output/plots/age_sex_count.tiff
-        figure4: output/plots/age_count.tiff
-        figure5: output/plots/sex_count.tiff
-        figure6: output/plots/Cause_of_Death_count_eng.tiff
-        figure7: output/plots/age_sex_count_eng.tiff
-        figure8: output/plots/age_count_eng.tiff
-        figure9: output/plots/sex_count_eng.tiff
-        figure10: output/plots/ethnicity_count_eng.tiff
-        figure11: output/plots/ethnicity_count.tiff
-        figure12: output/plots/ethnicity16_count_eng.tiff
-        figure13: output/plots/ethnicity16_count.tiff
+        figure1: output/plots/Cause_of_Death_count.jpg
+        figure2: output/plots/imd_count.jpg
+        figure3: output/plots/age_sex_count.jpg
+        figure4: output/plots/age_count.jpg
+        figure5: output/plots/sex_count.jpg
+        figure6: output/plots/Cause_of_Death_count_eng.jpg
+        figure7: output/plots/age_sex_count_eng.jpg
+        figure8: output/plots/age_count_eng.jpg
+        figure9: output/plots/sex_count_eng.jpg
+        figure10: output/plots/ethnicity_count_eng.jpg
+        figure11: output/plots/ethnicity_count.jpg
+        figure12: output/plots/ethnicity16_count_eng.jpg
+        figure13: output/plots/ethnicity16_count.jpg
 
   calculate_tpp_coverage:
     run: r:latest analysis/calculate_tpp_coverage.R
@@ -48,4 +48,4 @@ actions:
     outputs:
       moderately_sensitive:
         region_table: output/tables/tpp_pop_all.csv
-        region_map: output/plots/tpp_coverage_map.tiff
+        region_map: output/plots/tpp_coverage_map.jpg

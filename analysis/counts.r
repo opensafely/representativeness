@@ -258,7 +258,9 @@ write_csv(ethnicity2,here::here("output", "tables","ethnic_group.csv"))
 ethnicity_na<-ethnicity_unrounded %>%
   drop_na(Ethnic_Group) %>%
   group_by(group,cohort, region) %>%
-  mutate(N=round(N/5)*5,
+  mutate(
+         Total=sum(N),
+         N=round(N/5)*5,
          Total=round(Total/5)*5,
          percentage=N/Total * 100) 
 

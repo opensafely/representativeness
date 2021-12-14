@@ -33,6 +33,7 @@ library(readr)
 agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
 fs::dir_create(here::here("output", "plots"))
+fs::dir_create(here::here("output", "plots","na_removed"))
 ############################# deaths
 
 death<-read_csv(here::here("output", "tables","death_count.csv"))
@@ -60,6 +61,16 @@ imd_plot<-imd %>% filter(sex=="Total") %>%
 
 ggsave(filename=here::here("output", "plots","imd_count.jpg"),imd_plot)
 
+###### NA removed
+imd_NA<-read_csv(here::here("output", "tables","imd_count_NA.csv"))
+
+imd_plot_NA<-imd_NA %>% filter(sex=="Total") %>%
+  ggplot(aes(x=imd, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
+  theme_classic() + theme(axis.text.x = element_text( hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of Population")
+
+ggsave(filename=here::here("output", "plots","na_removed","imd_count_NA.jpg"),imd_plot_NA)
+
+
 ################################################ age by sex
 age_sex<-read_csv(here::here("output", "tables","age_sex_count.csv"))
 
@@ -73,8 +84,8 @@ age_sex_plot<-age_sex %>%
    geom_bar(stat = "identity",colour="grey3") + geom_bar(data=age_sex[which(age_sex$cohort=="TPP" & age_sex$region!="England"),], aes(x = age_group, y = percentage, fill = sex,alpha=cohort),stat = "identity",colour="white") +
    coord_flip() +
    scale_fill_brewer(palette = "Set1") +scale_alpha_discrete(range=c(0.3,0.7))+ 
-   scale_y_continuous(breaks = seq(-8, 8, 1), 
-                      labels = comma(c(seq(8,0,-1), seq(1,8,1)),accuracy=1)) + 
+   scale_y_continuous(breaks = seq(-20, 20, 1), 
+                      labels = comma(c(seq(20,0,-1), seq(1,20,1)),accuracy=1)) + 
    theme_bw() + theme(text = element_text(size=16)) + scale_x_discrete(limits = agelevels) +
    xlab("") + ylab(" % of cohort") 
   
@@ -86,8 +97,8 @@ age_sex_plot_eng<-age_sex %>%
     geom_bar(stat = "identity",colour="grey3") + geom_bar(data=age_sex[which(age_sex$cohort=="TPP" & age_sex$region=="England"),], aes(x = age_group, y = percentage, fill = sex,alpha=cohort),stat = "identity",colour="white") +
     coord_flip() +
     scale_fill_brewer(palette = "Set1") +scale_alpha_discrete(range=c(0.3,0.7))+ 
-    scale_y_continuous(breaks = seq(-8, 8, 1), 
-                     labels = comma(c(seq(8,0,-1), seq(1,8,1)),accuracy=1)) + 
+    scale_y_continuous(breaks = seq(-20, 20, 1), 
+                     labels = comma(c(seq(20,0,-1), seq(1,20,1)),accuracy=1)) + 
     theme_bw() + theme(text = element_text(size=16)) + scale_x_discrete(limits = agelevels) +
     xlab("") + ylab(" % of cohort") 
 
@@ -174,3 +185,37 @@ ethnicity_plot16_eng<-ethnicity %>%
     theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
 
 ggsave(filename=here::here("output", "plots","ethnicity16_count_eng.jpg"),ethnicity_plot16_eng,width = 30, height = 30, units = "cm")
+
+####### NA removed
+
+ethnicity_na<-read_csv(here::here("output", "tables","ethnic_group_NA.csv"))
+
+
+ethnicity_plot16_eng_na <-  ethnicity_na %>%
+  filter(region=="England",group=="16_2001") %>%
+  ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
+  theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
+
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_eng_na.jpg"),ethnicity_plot16_eng_na,width = 30, height = 30, units = "cm")
+
+ethnicity_plot_na<-ethnicity_na %>%
+  filter(region!="England",group=="5_2001") %>%
+  ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
+  theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
+
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_na.jpg"),ethnicity_plot_na,width = 45, height = 30, units = "cm")
+
+ethnicity_plot_eng_na<-ethnicity_na %>%
+  filter(region=="England",group=="5_2001") %>%
+  ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
+  theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
+
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_eng_na.jpg"),ethnicity_plot_eng_na,width = 30, height = 30, units = "cm")
+
+
+ethnicity_plot16_na<-ethnicity_na %>%
+  filter(region!="England",group=="16_2001") %>%
+  ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
+  theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all ethnicitys")
+
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_na.jpg"),ethnicity_plot16_na,width = 45, height = 30, units = "cm")

@@ -81,14 +81,20 @@ write_csv(deaths,here::here("output", "tables","death_count.csv"))  ####add .gz 
 imd_ons<-read_csv(here::here("data","imd_ons.csv.gz")) 
 
 imd_sex<-df_input %>%
-  group_by(imd,sex) %>% summarise(N = n()) 
+  group_by(imd,sex) %>% 
+  summarise(N = n()) %>%
+  mutate(sex = case_when(sex=="Female"~"Females",
+                         sex=="Male" ~ "Males",
+                         T~sex))
 
-imd<-imd_sex%>%
+imd_unrounded<-imd_sex%>%
   group_by(imd) %>%
   summarise(N=sum(N)) %>%
   mutate(sex="Total") %>% bind_rows(imd_sex) %>%
   mutate(cohort="TPP")  %>% 
-  bind_rows(imd_ons)%>%
+  bind_rows(imd_ons)
+
+imd <- imd_unrounded %>%
   group_by(sex,cohort) %>%
   mutate(Total=sum(N),
          N=round(N/5)*5,
@@ -103,6 +109,24 @@ imd<-imd_sex%>%
                          imd==5~"5: Least deprived"))
 
 write_csv(imd,here::here("output", "tables","imd_count.csv"))  ####add .gz to the end
+
+imd_NA<-imd_unrounded %>%
+  filter(imd!=0) %>%
+  group_by(sex,cohort) %>%
+  mutate(Total=sum(N),
+         N=round(N/5)*5,
+         Total=round(Total/5)*5,
+         percentage = round(N/Total*100,4)) %>%
+  ungroup() %>% arrange(cohort,sex,imd) %>%
+  mutate(imd = case_when(imd==1~"1: Most deprived",
+                         imd==2~"2",
+                         imd==3~"3",
+                         imd==4~"4",
+                         imd==0~"Unknown",
+                         imd==5~"5: Least deprived"))
+
+write_csv(imd_NA,here::here("output", "tables","imd_count_NA.csv"))  ####add .gz to the end
+
 
 ############################################## age
 age_ons_sex<-read_csv(here::here("data","age_ons_sex.csv.gz")) %>%
@@ -211,17 +235,31 @@ ethnicity<-eth_tpp_16 %>%
   bind_rows(eth_tpp) %>%
   bind_rows(eth_ons) 
 ### Add England
-  ethnicity2 <-ethnicity %>%
+ethnicity_unrounded <-ethnicity %>%
   group_by(group,Ethnic_Group,cohort) %>%
   summarise(N=sum(N)) %>% 
   group_by(group,cohort) %>%
   mutate(N=N,
          Total=sum(N),
          region="England") %>%
-  bind_rows(ethnicity) %>%
+  bind_rows(ethnicity) 
+  
+  ethnicity2 <- ethnicity_unrounded %>%
     ## add rounding
   mutate(N=round(N/5)*5,
          Total=round(Total/5)*5,
          percentage=N/Total * 100) 
 
 write_csv(ethnicity2,here::here("output", "tables","ethnic_group.csv"))
+
+
+#### NA removed
+
+ethnicity_na<-ethnicity_unrounded %>%
+  drop_na(Ethnic_Group) %>%
+  group_by(group,cohort, region) %>%
+  mutate(N=round(N/5)*5,
+         Total=round(Total/5)*5,
+         percentage=N/Total * 100) 
+
+write_csv(ethnicity_na,here::here("output", "tables","ethnic_group_NA.csv"))

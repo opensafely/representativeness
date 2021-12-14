@@ -18,9 +18,11 @@ actions:
       moderately_sensitive:
         death_count: output/tables/death_count.csv
         imd_table: output/tables/imd_count.csv
+        imd_table_NA: output/tables/imd_count_NA.csv
         age_sex_table: output/tables/age_sex_count.csv
         age_table: output/tables/age_count.csv
         ethnicity_table: output/tables/ethnic_group.csv
+        ethnicity_table_NA: output/tables/ethnic_group_NA.csv
 
 
   plots:
@@ -41,6 +43,12 @@ actions:
         figure11: output/plots/ethnicity_count.jpg
         figure12: output/plots/ethnicity16_count_eng.jpg
         figure13: output/plots/ethnicity16_count.jpg
+        figure14: output/plots/na_removed/imd_count_NA.jpg
+        figure15: output/plots/na_removed/ethnicity_count_na.jpg
+        figure16: output/plots/na_removed/ethnicity_count_eng_na.jpg
+        figure17: output/plots/na_removed/ethnicity16_count_eng_na.jpg
+        figure18: output/plots/na_removed/ethnicity16_count_na.jpg
+        
 
   calculate_tpp_coverage:
     run: r:latest analysis/calculate_tpp_coverage.R

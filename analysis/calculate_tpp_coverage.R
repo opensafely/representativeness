@@ -107,7 +107,7 @@ coverage_plot<-nuts_shp %>%
   left_join(tpp_cov,by="nuts118cd") %>%
   ggplot(aes(geometry = geometry,fill=tpp_cov_all)) +
       geom_sf(lwd = 0, colour='grey') +
-      scale_fill_gradient2(midpoint = median(tpp_cov$tpp_cov_all), high = "navyblue",
+      scale_fill_gradient2(limits=c(0,100), breaks = seq(0,100,10),midpoint = 50, high = "navyblue",
                            mid = "indianred", low = "ivory1",na.value = "white") +
       theme(legend.position = c(0.2,0.5),legend.text.align = 1,
             panel.background=element_rect(fill="lightblue")) + 

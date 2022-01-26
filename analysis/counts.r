@@ -207,8 +207,8 @@ eth_tpp <- df_input %>%
 
 eth_tpp_16 <- df_input %>%
   mutate(Ethnic_Group=case_when(
-    ethnicity_16 == "1" ~ "British",
-    ethnicity_16 == "2" ~ "Irish",
+    ethnicity_16 == "1" ~ "White British",
+    ethnicity_16 == "2" ~ "White Irish",
     ethnicity_16 == "3" ~ "Other White",
     ethnicity_16 == "4" ~ "White and Black Caribbean",
     ethnicity_16 == "5" ~ "White and Black African",

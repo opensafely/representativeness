@@ -57,3 +57,4 @@ actions:
       moderately_sensitive:
         region_table: output/tables/tpp_pop_all.csv
         region_map: output/plots/tpp_coverage_map.jpg
+        region_map_2: output/plots/tpp_coverage_map_2.jpg

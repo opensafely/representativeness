@@ -8,3 +8,4 @@ metadata/*
 *.ipynb_checkpoints
 analysis/SRO_Notebook.ipynb
 .Rproj.user
+released_outputs/*

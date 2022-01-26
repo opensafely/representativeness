@@ -128,7 +128,8 @@ eth_ons<-read_excel(here::here("data","nomis_2021_11_22_213653.xlsx"),skip = 8,n
   mutate(Ethnic_Group=str_split(`Ethnic Group`, ": ", 2),
          Ethnic_Group=sapply(Ethnic_Group,"[",2),
          Ethnic_Group=case_when(
-           Ethnic_Group=="English/Welsh/Scottish/Northern Irish/British"~"British",
+           Ethnic_Group=="English/Welsh/Scottish/Northern Irish/British"~"White British",
+           Ethnic_Group=="Irish"~"White Irish",
            Ethnic_Group=="Arab"~"Any other ethnic group",
            Ethnic_Group=="Gypsy or Irish Traveller"~"Other White",
            TRUE ~ Ethnic_Group),

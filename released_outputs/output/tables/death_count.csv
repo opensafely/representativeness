@@ -1,0 +1,106 @@
+Cause_of_Death,N,Total,region,cohort,percentage
+COVID-19,26965,224885,England,TPP,11.99057295951264
+Cerebrovascular diseases,11390,224885,England,TPP,5.064810903350601
+Dementia and Alzheimer disease,27140,224885,England,TPP,12.068390510705472
+Ischaemic heart diseases,20895,224885,England,TPP,9.291415612424128
+"Malignant neoplasm of trachea, bronchus and lung",11135,224885,England,TPP,4.951419614469618
+COVID-19,5475,50100,East,TPP,10.928143712574851
+Cerebrovascular diseases,2415,50100,East,TPP,4.820359281437126
+Dementia and Alzheimer disease,6630,50100,East,TPP,13.233532934131736
+Ischaemic heart diseases,4265,50100,East,TPP,8.512974051896208
+"Malignant neoplasm of trachea, bronchus and lung",2295,50100,East,TPP,4.580838323353293
+COVID-19,5165,40165,East Midlands,TPP,12.859454749159715
+Cerebrovascular diseases,1940,40165,East Midlands,TPP,4.830075936760862
+Dementia and Alzheimer disease,4825,40165,East Midlands,TPP,12.01294659529441
+Ischaemic heart diseases,3785,40165,East Midlands,TPP,9.4236275364123
+"Malignant neoplasm of trachea, bronchus and lung",2040,40165,East Midlands,TPP,5.079048923191834
+COVID-19,1365,7745,London,TPP,17.624273724983862
+Cerebrovascular diseases,375,7745,London,TPP,4.841833440929632
+Dementia and Alzheimer disease,715,7745,London,TPP,9.231762427372498
+Ischaemic heart diseases,705,7745,London,TPP,9.102646868947708
+"Malignant neoplasm of trachea, bronchus and lung",365,7745,London,TPP,4.712717882504842
+COVID-19,1940,12145,North East,TPP,15.973651708522024
+Cerebrovascular diseases,560,12145,North East,TPP,4.610951008645533
+Dementia and Alzheimer disease,1495,12145,North East,TPP,12.3095924248662
+Ischaemic heart diseases,1070,12145,North East,TPP,8.810209962947715
+"Malignant neoplasm of trachea, bronchus and lung",635,12145,North East,TPP,5.22848909016056
+COVID-19,3330,22630,North West,TPP,14.714980114891738
+Cerebrovascular diseases,1095,22630,North West,TPP,4.838709677419355
+Dementia and Alzheimer disease,2465,22630,North West,TPP,10.892620415377817
+Ischaemic heart diseases,2080,22630,North West,TPP,9.191338930623067
+"Malignant neoplasm of trachea, bronchus and lung",1280,22630,North West,TPP,5.656208572691118
+COVID-19,1185,15595,South East,TPP,7.5985892914395645
+Cerebrovascular diseases,815,15595,South East,TPP,5.226033985251683
+Dementia and Alzheimer disease,1910,15595,South East,TPP,12.247515229240141
+Ischaemic heart diseases,1365,15595,South East,TPP,8.752805386341777
+"Malignant neoplasm of trachea, bronchus and lung",730,15595,South East,TPP,4.680987495992305
+COVID-19,2310,33400,South West,TPP,6.916167664670658
+Cerebrovascular diseases,1990,33400,South West,TPP,5.958083832335329
+Dementia and Alzheimer disease,4215,33400,South West,TPP,12.619760479041917
+Ischaemic heart diseases,3320,33400,South West,TPP,9.940119760479043
+"Malignant neoplasm of trachea, bronchus and lung",1475,33400,South West,TPP,4.416167664670659
+COVID-19,1460,9205,West Midlands,TPP,15.860945138511678
+Cerebrovascular diseases,395,9205,West Midlands,TPP,4.2911461162411735
+Dementia and Alzheimer disease,965,9205,West Midlands,TPP,10.483432916892992
+Ischaemic heart diseases,890,9205,West Midlands,TPP,9.66865833785986
+"Malignant neoplasm of trachea, bronchus and lung",460,9205,West Midlands,TPP,4.997284084736556
+COVID-19,4735,33830,Yorkshire and The Humber,TPP,13.996452852497784
+Cerebrovascular diseases,1795,33830,Yorkshire and The Humber,TPP,5.3059414720662135
+Dementia and Alzheimer disease,3905,33830,Yorkshire and The Humber,TPP,11.543009163464381
+Ischaemic heart diseases,3395,33830,Yorkshire and The Humber,TPP,10.03547147502217
+"Malignant neoplasm of trachea, bronchus and lung",1850,33830,Yorkshire and The Humber,TPP,5.468519065917824
+COVID-19,5,70,NA,TPP,7.142857142857142
+Cerebrovascular diseases,5,70,NA,TPP,7.142857142857142
+Dementia and Alzheimer disease,5,70,NA,TPP,7.142857142857142
+Ischaemic heart diseases,10,70,NA,TPP,14.285714285714285
+"Malignant neoplasm of trachea, bronchus and lung",5,70,NA,TPP,7.142857142857142
+"Malignant neoplasm of trachea, bronchus and lung",2820,63975,East,ONS,4.407971864009379
+"Malignant neoplasm of trachea, bronchus and lung",2555,52055,East Midlands,ONS,4.90827009893382
+"Malignant neoplasm of trachea, bronchus and lung",2560,59690,London,ONS,4.288825598927794
+"Malignant neoplasm of trachea, bronchus and lung",1855,32230,North East,ONS,5.755507291343469
+"Malignant neoplasm of trachea, bronchus and lung",4405,83990,North West,ONS,5.24467198476009
+"Malignant neoplasm of trachea, bronchus and lung",3970,91410,South East,ONS,4.343069686029975
+"Malignant neoplasm of trachea, bronchus and lung",2690,61165,South West,ONS,4.397939998365078
+"Malignant neoplasm of trachea, bronchus and lung",2915,64740,West Midlands,ONS,4.5026258881680565
+"Malignant neoplasm of trachea, bronchus and lung",3170,60450,Yorkshire and The Humber,ONS,5.244003308519438
+"Malignant neoplasm of trachea, bronchus and lung",28720,569700,England,ONS,5.0412497805862735
+Cerebrovascular diseases,3020,63975,East,ONS,4.720593982024228
+Cerebrovascular diseases,2460,52055,East Midlands,ONS,4.725770819325714
+Cerebrovascular diseases,2655,59690,London,ONS,4.447981236388005
+Cerebrovascular diseases,1520,32230,North East,ONS,4.716103009618368
+Cerebrovascular diseases,3815,83990,North West,ONS,4.542207405643529
+Cerebrovascular diseases,4640,91410,South East,ONS,5.0760310688108525
+Cerebrovascular diseases,3455,61165,South West,ONS,5.648655276710537
+Cerebrovascular diseases,3085,64740,West Midlands,ONS,4.765214704973742
+Cerebrovascular diseases,3100,60450,Yorkshire and The Humber,ONS,5.128205128205128
+Cerebrovascular diseases,29680,569700,England,ONS,5.209759522555731
+Dementia and Alzheimer disease,8245,63975,East,ONS,12.887846815162174
+Dementia and Alzheimer disease,6110,52055,East Midlands,ONS,11.737585246374028
+Dementia and Alzheimer disease,6090,59690,London,ONS,10.202714022449321
+Dementia and Alzheimer disease,3250,32230,North East,ONS,10.083772882407695
+Dementia and Alzheimer disease,9575,83990,North West,ONS,11.4001666865103
+Dementia and Alzheimer disease,11390,91410,South East,ONS,12.460343507274915
+Dementia and Alzheimer disease,7360,61165,South West,ONS,12.033025423036051
+Dementia and Alzheimer disease,7385,64740,West Midlands,ONS,11.407167130058696
+Dementia and Alzheimer disease,6730,60450,Yorkshire and The Humber,ONS,11.133167907361456
+Dementia and Alzheimer disease,70035,569700,England,ONS,12.293312269615587
+Ischaemic heart diseases,5490,63975,East,ONS,8.581477139507621
+Ischaemic heart diseases,4940,52055,East Midlands,ONS,9.489962539621555
+Ischaemic heart diseases,5285,59690,London,ONS,8.85407941028648
+Ischaemic heart diseases,2915,32230,North East,ONS,9.044368600682594
+Ischaemic heart diseases,7920,83990,North West,ONS,9.429694011191808
+Ischaemic heart diseases,7580,91410,South East,ONS,8.292309375341866
+Ischaemic heart diseases,5815,61165,South West,ONS,9.507071037357965
+Ischaemic heart diseases,6275,64740,West Midlands,ONS,9.692616620327463
+Ischaemic heart diseases,5850,60450,Yorkshire and The Humber,ONS,9.67741935483871
+Ischaemic heart diseases,55690,569700,England,ONS,9.775320344040724
+COVID-19,6475,63975,East,ONS,10.121141070730754
+COVID-19,6255,52055,East Midlands,ONS,12.016136778407454
+COVID-19,10070,59690,London,ONS,16.870497570782376
+COVID-19,4465,32230,North East,ONS,13.853552590753957
+COVID-19,12430,83990,North West,ONS,14.799380878676033
+COVID-19,9145,91410,South East,ONS,10.004375888852424
+COVID-19,3985,61165,South West,ONS,6.5151639009237305
+COVID-19,8230,64740,West Midlands,ONS,12.712388013592832
+COVID-19,8240,60450,Yorkshire and The Humber,ONS,13.631100082712985
+COVID-19,73680,569700,England,ONS,12.933122696155872

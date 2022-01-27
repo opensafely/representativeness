@@ -9,3 +9,4 @@ metadata/*
 analysis/SRO_Notebook.ipynb
 .Rproj.user
 released_outputs/*
+.Rhistory

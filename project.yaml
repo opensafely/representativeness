@@ -18,7 +18,7 @@ actions:
         cohort: output/cohorts/input_deaths.csv.gz
 
   counts:
-    run: r:latest analysis/counts.R
+    run: r:latest analysis/counts.r
     needs: [generate_cohort]
     outputs:
       moderately_sensitive:

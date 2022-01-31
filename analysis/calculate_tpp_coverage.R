@@ -122,18 +122,18 @@ coverage_plot_2<-nuts_shp %>%
   filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%
   left_join(tpp_cov,by="nuts118cd") %>%
   ggplot(aes(geometry = geometry,fill=tpp_cov_all)) +
-  geom_sf(lwd = 0, colour='grey') +
+  geom_sf(lwd = 0, colour='black') +
   geom_sf_label(aes(label = paste0(round(tpp_pop_all/1000000,1),"M")),
                 label.size = 0.1,
                 label.r = unit(0.5, "lines"),
-                fun.geometry = st_centroid ,
-                show.legend = TRUE) +
+                fun.geometry = st_centroid,
+                show.legend = F) +
   scale_fill_gradient2(limits=c(0,100), breaks = c(0,sort(round(tpp_cov$tpp_cov_all,0)),100),midpoint = 50, high = "navyblue",
                        mid = "indianred", low = "ivory1",na.value = "white") +
   theme(legend.position = c(0.2,0.5),legend.text.align = 1,
-        panel.background=element_rect(fill="lightblue")) + 
+        panel.background=element_rect(fill="white")) + 
   ggtitle("TPP population coverage per NUTS 1 Region") +
   guides(fill=guide_legend(title="TPP population\ncoverage (%)")) + 
-  xlab("Longitude") + ylab("Latitude")
+  xlab("") + ylab("")
 
 ggsave(filename=here::here("output", "plots","tpp_coverage_map_2.jpg"),coverage_plot_2,width = 20,height = 20, units = "cm")

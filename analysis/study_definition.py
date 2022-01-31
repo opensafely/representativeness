@@ -83,29 +83,5 @@ study = StudyDefinition(
         },
     ),
 
-    died_any=patients.died_from_any_cause(
-        between=[index_date,end_date],
-        returning="binary_flag",
-        return_expectations={
-            "rate" : "exponential_increase",
-            "incidence": 0.4,
-        },
-    ),
-
-    died_cause_ons=patients.died_from_any_cause(
-        between=[index_date,end_date],
-        returning="underlying_cause_of_death",
-        return_expectations={"category": {"ratios": {"U071":0.2, "C33":0.2, "I60":0.1, "F01":0.1 , "F02":0.05 , "I22":0.05 ,"C34":0.05, "I23":0.25}},},
-    ),
-
-    died_ons_covid_flag_any=patients.with_these_codes_on_death_certificate(
-        covid_codelist,
-        between=[index_date,end_date],
-        match_only_underlying_cause=True,
-        return_expectations={
-            "date": {"earliest" : "2020-01-01"},
-            "rate" : "exponential_increase"
-        },
-    ),
     **demographic_variables,
 )

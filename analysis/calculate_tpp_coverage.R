@@ -102,22 +102,6 @@ nuts_shp<-st_read("data/NUTS_Level_1_(January_2018)_Boundaries.shp")
 saveRDS(nuts_shp,here::here("data", "nuts_shp.rds"))
 nuts_shp<-readRDS(here::here("data", "nuts_shp.rds"))
 
-coverage_plot<-nuts_shp %>%
-  filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%
-  left_join(tpp_cov,by="nuts118cd") %>%
-  ggplot(aes(geometry = geometry,fill=tpp_cov_all)) +
-      geom_sf(lwd = 0, colour='grey') +
-      scale_fill_gradient2(limits=c(0,100), breaks = seq(0,100,10),midpoint = 50, high = "navyblue",
-                           mid = "indianred", low = "ivory1",na.value = "white") +
-      theme(legend.position = c(0.2,0.5),legend.text.align = 1,
-            panel.background=element_rect(fill="lightblue")) + 
-      ggtitle("TPP population coverage per NUTS 1 Region") +
-      guides(fill=guide_legend(title="TPP population\ncoverage (%)")) + 
-      xlab("Longitude") + ylab("Latitude")
-  
-    
-ggsave(filename=here::here("output", "plots","tpp_coverage_map.jpg"),coverage_plot,width = 20,height = 20, units = "cm")
-
 coverage_plot_2<-nuts_shp %>%
   filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%
   left_join(tpp_cov,by="nuts118cd") %>%
@@ -136,4 +120,4 @@ coverage_plot_2<-nuts_shp %>%
   guides(fill=guide_legend(title="TPP population\ncoverage (%)")) + 
   xlab("") + ylab("")
 
-ggsave(filename=here::here("output", "plots","tpp_coverage_map_2.jpg"),coverage_plot_2,width = 20,height = 20, units = "cm")
+ggsave(filename=here::here("output", "plots","tpp_coverage_map.jpg"),coverage_plot,width = 20,height = 20, units = "cm")

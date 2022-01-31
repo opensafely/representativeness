@@ -102,7 +102,7 @@ nuts_shp<-st_read("data/NUTS_Level_1_(January_2018)_Boundaries.shp")
 saveRDS(nuts_shp,here::here("data", "nuts_shp.rds"))
 nuts_shp<-readRDS(here::here("data", "nuts_shp.rds"))
 
-coverage_plot_2<-nuts_shp %>%
+coverage_plot<-nuts_shp %>%
   filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%
   left_join(tpp_cov,by="nuts118cd") %>%
   ggplot(aes(geometry = geometry,fill=tpp_cov_all)) +

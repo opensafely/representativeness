@@ -19,22 +19,15 @@ study = StudyDefinition(
     },
     
     # This line defines the study population
-    population = patients.satisfying(
-    """
-    registered AND 
-    died_any
-    """,
+    population = patients.registered_as_of("died_date"),
 
-        died_date=patients.died_from_any_cause(
-            between=[index_date,end_date],
-            returning="date_of_death",
-            date_format="YYYY-MM-DD",
-            return_expectations={
-                "date": {"earliest" : end_date},
-            },
-        ),
-        registered=patients.registered_as_of("died_date"),
-
+    died_date=patients.died_from_any_cause(
+        between=[index_date,end_date],
+        returning="date_of_death",
+        date_format="YYYY-MM-DD",
+        return_expectations={
+            "date": {"earliest" : end_date},
+        },
     ),
 
     died_any=patients.died_from_any_cause(

@@ -11,12 +11,17 @@ actions:
       highly_sensitive:
         cohort: output/cohorts/input.csv.gz
 
+  generate_deaths_cohort:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_deaths --output-dir=output/cohorts --output-format=csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/cohorts/input_deaths.csv.gz
+
   counts:
     run: r:latest analysis/counts.r
     needs: [generate_cohort]
     outputs:
       moderately_sensitive:
-        death_count: output/tables/death_count.csv
         imd_table: output/tables/imd_count.csv
         imd_table_NA: output/tables/imd_count_NA.csv
         age_sex_table: output/tables/age_sex_count.csv
@@ -30,12 +35,10 @@ actions:
     needs: [counts]
     outputs:
       moderately_sensitive:
-        figure1: output/plots/Cause_of_Death_count.jpg
         figure2: output/plots/imd_count.jpg
         figure3: output/plots/age_sex_count.jpg
         figure4: output/plots/age_count.jpg
         figure5: output/plots/sex_count.jpg
-        figure6: output/plots/Cause_of_Death_count_eng.jpg
         figure7: output/plots/age_sex_count_eng.jpg
         figure8: output/plots/age_count_eng.jpg
         figure9: output/plots/sex_count_eng.jpg
@@ -57,4 +60,18 @@ actions:
       moderately_sensitive:
         region_table: output/tables/tpp_pop_all.csv
         region_map: output/plots/tpp_coverage_map.jpg
-        region_map_2: output/plots/tpp_coverage_map_2.jpg
+
+  counts_deaths:
+    run: r:latest analysis/death_counts.R
+    needs: [generate_deaths_cohort]
+    outputs:
+      moderately_sensitive:
+        death_count: output/tables/death_count.csv
+
+  plots_deaths:
+    run: r:latest analysis/death_plots.R
+    needs: [counts_deaths]
+    outputs:
+      moderately_sensitive:
+        figure1: output/plots/Cause_of_Death_count.jpg
+        figure6: output/plots/Cause_of_Death_count_eng.jpg

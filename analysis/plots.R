@@ -3,13 +3,10 @@
 #
 # Input:  /output/tables/age_sex_count.csv.gz
 #         /output/tables/age_count.csv.gz
-#         /output/tables/death_count.csv.gz
 #         /output/tables/imd_count.csv.gz
 #         /output/tables/ethnic_group.csv
 #
-# output: output/plots/Cause_of_Death_count.jpg
-#         output/plots/Cause_of_Death_count_eng.jpg
-#         output/plots/imd_count.jpg
+# output: output/plots/imd_count.jpg
 #         output/plots/age_sex_count.jpg
 #         output/plots/age_sex_count_eng.jpg
 #         output/plots/age_count.jpg
@@ -22,7 +19,7 @@
 #         output/plots/ethnicity16_count_eng.jpg
 # 
 # Author: Colm D Andrews
-# Date:   26/11/2021
+# Date:   31/01/2022
 #
 ################################################################################
 
@@ -34,23 +31,6 @@ agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
 
 fs::dir_create(here::here("output", "plots"))
 fs::dir_create(here::here("output", "plots","na_removed"))
-############################# deaths
-
-death<-read_csv(here::here("output", "tables","death_count.csv"))
-
-death_plot<-death %>%
-  filter(region!="England") %>%
-  ggplot(aes(x=Cause_of_Death, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") + facet_wrap(~ region) +
-    theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all deaths")
-
-ggsave(filename=here::here("output", "plots","Cause_of_Death_count.jpg"),death_plot,width = 30, height = 30, units = "cm")
-
-death_plot_eng<-death %>%
-  filter(region=="England") %>%
-  ggplot(aes(x=Cause_of_Death, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
-    theme_classic() + theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of all deaths")
-
-ggsave(filename=here::here("output", "plots","Cause_of_Death_count_eng.jpg"),death_plot_eng,width = 30, height = 30, units = "cm")
 
 ##################################### imd
 imd<-read_csv(here::here("output", "tables","imd_count.csv"))

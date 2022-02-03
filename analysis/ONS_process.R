@@ -134,7 +134,7 @@ eth_ons<-read_excel(here::here("data","nomis_2021_11_22_213653.xlsx"),skip = 8,n
            Ethnic_Group=="Gypsy or Irish Traveller"~"Other White",
            TRUE ~ Ethnic_Group),
          Ethnic_Group5=case_when(
-           (Ethnic_Group=="British" | Ethnic_Group=="Irish" | Ethnic_Group=="Other White")~"White",
+           (Ethnic_Group=="White British" | Ethnic_Group=="Irish" | Ethnic_Group=="Other White")~"White",
            (Ethnic_Group=="White and Black Caribbean"|Ethnic_Group=="White and Black African"|Ethnic_Group=="White and Asian"|Ethnic_Group=="Other Mixed")~"Mixed/multiple ethnic groups",
            (Ethnic_Group=="Indian"|Ethnic_Group=="Pakistani"|Ethnic_Group=="Bangladeshi"|Ethnic_Group=="Other Asian")~"Asian",
            (Ethnic_Group=="African"|Ethnic_Group=="Caribbean"|Ethnic_Group=="Other Black")~"Black",

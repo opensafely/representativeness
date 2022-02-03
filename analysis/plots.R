@@ -226,7 +226,6 @@ ggsave(filename=here::here("output", "plots","ethnicity16_count_eng.jpg"),ethnic
 
 ethnicity_na<-read_csv(here::here("output", "tables","ethnic_group_NA.csv"))
 
-
 ethnicity_plot16_eng_na <-  ethnicity_na %>%
   filter(region=="England",group=="16_2001") %>%
   ggplot(aes(x=Ethnic_Group, y=percentage, fill=cohort)) +

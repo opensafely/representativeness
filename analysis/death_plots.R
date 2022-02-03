@@ -27,9 +27,9 @@ death_plot<-death %>%
   geom_bar(stat = "identity",position = "dodge") + 
   facet_wrap(~ region) +
   theme_classic() + 
-  theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + 
+  theme(text = element_text(size = 20)) + 
   coord_flip() + 
-  xlab("") + ylab(" % of all deaths") +
+  xlab("") + ylab("Percentage of all deaths") +
   scale_x_discrete(limits = levels)
 
 ggsave(filename=here::here("output", "plots","Cause_of_Death_count.jpg"),death_plot,width = 30, height = 30, units = "cm")
@@ -39,9 +39,9 @@ death_plot_eng<-death %>%
   ggplot(aes(x=Cause_of_Death, y=percentage, fill=cohort)) +
   geom_bar(stat = "identity",position = "dodge") +
   theme_classic() + 
-  theme(axis.text.x = element_text(size = 16, hjust=0,vjust=0)) + 
+  theme(text = element_text(size = 20)) + 
   coord_flip() + xlab("") + 
-  ylab(" % of all deaths") + 
+  ylab("Percentage of all deaths") + 
   scale_x_discrete(limits = levels)
 
 ggsave(filename=here::here("output", "plots","Cause_of_Death_count_eng.jpg"),death_plot_eng,width = 30, height = 30, units = "cm")

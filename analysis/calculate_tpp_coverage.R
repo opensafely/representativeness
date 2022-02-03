@@ -106,7 +106,7 @@ coverage_plot<-nuts_shp %>%
   filter(nuts118nm!="Wales" & nuts118nm!="Northern Ireland" & nuts118nm!="Scotland") %>%
   left_join(tpp_cov,by="nuts118cd") %>%
   ggplot(aes(geometry = geometry,fill=tpp_cov_all)) +
-  geom_sf(lwd = 0, colour='black') +
+  geom_sf(lwd = .8, colour='black') +
   geom_sf_label(aes(label = paste0(round(tpp_pop_all/1000000,1),"M")),
                 label.size = 0.1,
                 label.r = unit(0.5, "lines"),

@@ -51,6 +51,8 @@ actions:
         figure16: output/plots/na_removed/ethnicity_count_eng_na.jpg
         figure17: output/plots/na_removed/ethnicity16_count_eng_na.jpg
         figure18: output/plots/na_removed/ethnicity16_count_na.jpg
+        figure19: output/plots/ethnicity_5_16_comb.jpg
+        figure20: output/plots/agesex_comb_plot.jpg
         
 
   calculate_tpp_coverage:

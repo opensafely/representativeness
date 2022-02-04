@@ -181,7 +181,7 @@ ethnicity_plot<-ethnicity %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicities")
 
 ggsave(filename=here::here("output", "plots","ethnicity_count.jpg"),ethnicity_plot,width = 45, height = 30, units = "cm")
 
@@ -193,7 +193,7 @@ ethnicity_plot_eng<-ethnicity %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicities")
 
 ggsave(filename=here::here("output", "plots","ethnicity_count_eng.jpg"),ethnicity_plot_eng,width = 30, height = 30, units = "cm")
 
@@ -207,7 +207,7 @@ ethnicity_plot16<-ethnicity %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicities")
 
 ggsave(filename=here::here("output", "plots","ethnicity16_count.jpg"),ethnicity_plot16,width = 45, height = 30, units = "cm")
 
@@ -219,7 +219,7 @@ ethnicity_plot16_eng<-ethnicity %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicities")
 
 ggsave(filename=here::here("output", "plots","ethnicity16_count_eng.jpg"),ethnicity_plot16_eng,width = 30, height = 30, units = "cm")
 
@@ -235,7 +235,7 @@ ethnicity_plot16_eng_na <-  ethnicity_na %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicities")
 
 ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_eng_na.jpg"),ethnicity_plot16_eng_na,width = 30, height = 30, units = "cm")
 
@@ -248,7 +248,7 @@ ethnicity_plot_na<-ethnicity_na %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicities")
 
 ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_na.jpg"),ethnicity_plot_na,width = 45, height = 30, units = "cm")
 
@@ -260,7 +260,7 @@ ethnicity_plot_eng_na<-ethnicity_na %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys") 
+  xlab("") + ylab("Percentage of all ethnicities") 
 
 ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_eng_na.jpg"),ethnicity_plot_eng_na,width = 30, height = 30, units = "cm")
 
@@ -274,7 +274,7 @@ ethnicity_plot16_na<-ethnicity_na %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys") 
+  xlab("") + ylab("Percentage of all ethnicities") 
   
 
 ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_na.jpg"),ethnicity_plot16_na,width = 45, height = 30, units = "cm")

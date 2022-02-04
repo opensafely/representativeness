@@ -26,6 +26,7 @@
 library(tidyverse)
 library(scales)
 library(readr)
+library(ggpubr)
 
 agelevels<-c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90+")
 
@@ -54,7 +55,7 @@ imd_plot_NA<-imd_NA %>% filter(sex=="Total") %>%
         ylab("Percentage of Population") 
         
 
-ggsave(filename=here::here("output", "plots","na_removed","imd_count_NA.jpg"),imd_plot_NA)
+ggsave(filename=here::here("output", "plots","na_removed","imd_count_NA.jpg"),imd_plot_NA,,width = 20, height = 20, units = "cm")
 
 
 ################################################ age by sex
@@ -259,7 +260,7 @@ ethnicity_plot_eng_na<-ethnicity_na %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicitys") 
 
 ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_eng_na.jpg"),ethnicity_plot_eng_na,width = 30, height = 30, units = "cm")
 
@@ -273,6 +274,21 @@ ethnicity_plot16_na<-ethnicity_na %>%
   theme(text = element_text(size = 20)) +
   theme(axis.text.x = element_text(size = 20, hjust=0,vjust=0)) + 
   coord_flip() + 
-  xlab("") + ylab("Percentage of all ethnicitys")
+  xlab("") + ylab("Percentage of all ethnicitys") 
+  
 
 ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_na.jpg"),ethnicity_plot16_na,width = 45, height = 30, units = "cm")
+
+ethnicity_5_16<-ggarrange(ethnicity_plot_eng_na, ethnicity_plot16_eng_na, 
+          labels = c("A", "B"),
+          ncol = 1, nrow = 2,
+          common.legend=T)
+
+ggsave(filename=here::here("output", "plots","ethnicity_5_16_comb.jpg"),ethnicity_5_16,width = 30, height = 45, units = "cm")
+
+
+agesex_comb_plot<-ggarrange(age_plot_eng, age_sex_plot_eng, 
+                          labels = c("A", "B"),
+                          ncol = 1, nrow = 2)
+
+ggsave(filename=here::here("output", "plots","agesex_comb_plot.jpg"),agesex_comb_plot,width = 30, height = 45, units = "cm")

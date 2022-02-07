@@ -6,17 +6,17 @@
 #         /output/tables/imd_count.csv.gz
 #         /output/tables/ethnic_group.csv
 #
-# output: output/plots/imd_count.jpg
-#         output/plots/age_sex_count.jpg
-#         output/plots/age_sex_count_eng.jpg
-#         output/plots/age_count.jpg
-#         output/plots/age_count_eng.jpg
-#         output/plots/sex_count.jpg
-#         output/plots/sex_count_eng.jpg
-#         output/plots/ethnicity_count.jpg
-#         output/plots/ethnicity_count_eng.jpg
-#         output/plots/ethnicity16_count.jpg
-#         output/plots/ethnicity16_count_eng.jpg
+# output: output/plots/imd_count.tiff
+#         output/plots/age_sex_count.tiff
+#         output/plots/age_sex_count_eng.tiff
+#         output/plots/age_count.tiff
+#         output/plots/age_count_eng.tiff
+#         output/plots/sex_count.tiff
+#         output/plots/sex_count_eng.tiff
+#         output/plots/ethnicity_count.tiff
+#         output/plots/ethnicity_count_eng.tiff
+#         output/plots/ethnicity16_count.tiff
+#         output/plots/ethnicity16_count_eng.tiff
 # 
 # Author: Colm D Andrews
 # Date:   31/01/2022
@@ -40,7 +40,7 @@ imd_plot<-imd %>% filter(sex=="Total") %>%
   ggplot(aes(x=imd, y=percentage, fill=cohort)) +geom_bar(stat = "identity",position = "dodge") +
     theme_classic() + theme(axis.text.x = element_text( hjust=0,vjust=0)) + coord_flip() + xlab("") + ylab(" % of Population")
 
-ggsave(filename=here::here("output", "plots","imd_count.jpg"),imd_plot)
+ggsave(filename=here::here("output", "plots","imd_count.tiff"),imd_plot,dpi=600)
 
 ###### NA removed
 imd_NA<-read_csv(here::here("output", "tables","imd_count_NA.csv"))
@@ -55,7 +55,7 @@ imd_plot_NA<-imd_NA %>% filter(sex=="Total") %>%
         ylab("Percentage of Population") 
         
 
-ggsave(filename=here::here("output", "plots","na_removed","imd_count_NA.jpg"),imd_plot_NA,,width = 20, height = 20, units = "cm")
+ggsave(filename=here::here("output", "plots","na_removed","imd_count_NA.tiff"),imd_plot_NA,dpi=600,,width = 20, height = 20, units = "cm")
 
 
 ################################################ age by sex
@@ -82,7 +82,7 @@ age_sex_plot<-age_sex %>%
    scale_x_discrete(limits = agelevels) +
    xlab("") + ylab("Percentage of cohort") 
   
-ggsave(filename=here::here("output", "plots","age_sex_count.jpg"),age_sex_plot,width = 60, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","age_sex_count.tiff"),age_sex_plot,dpi=600,width = 60, height = 30, units = "cm")
 
 age_sex_plot_eng<-age_sex %>%
   filter(cohort=="ONS",region=="England") %>%
@@ -101,7 +101,7 @@ age_sex_plot_eng<-age_sex %>%
   scale_x_discrete(limits = agelevels) +
   xlab("") + ylab("Percentage of cohort") 
 
-ggsave(filename=here::here("output", "plots","age_sex_count_eng.jpg"),age_sex_plot_eng,width = 20, height = 15, units = "cm")
+ggsave(filename=here::here("output", "plots","age_sex_count_eng.tiff"),age_sex_plot_eng,dpi=600,width = 20, height = 15, units = "cm")
 
 ################################################ age
 
@@ -119,7 +119,7 @@ age_plot <-age %>%
     xlab("") + ylab("Percentage of cohort") + 
     scale_x_discrete(limits = agelevels)
 
-ggsave(filename=here::here("output", "plots","age_count.jpg"),age_plot,width = 60, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","age_count.tiff"),age_plot,dpi=600,width = 60, height = 30, units = "cm")
 
 age_plot_eng <-age %>%
   filter(region=="England") %>%
@@ -132,7 +132,7 @@ age_plot_eng <-age %>%
   xlab("") + ylab("Percentage of cohort") + 
   scale_x_discrete(limits = agelevels)
 
-ggsave(filename=here::here("output", "plots","age_count_eng.jpg"),age_plot_eng,width = 30, height = 20, units = "cm")
+ggsave(filename=here::here("output", "plots","age_count_eng.tiff"),age_plot_eng,dpi=600,width = 30, height = 20, units = "cm")
 
 ############################################## sex
 sex<-age_sex %>%
@@ -154,7 +154,7 @@ sex_plot<-sex %>%
   theme(axis.text.x = element_text(size=20,angle = 90,hjust=0.95,vjust=0.2)) + 
   xlab("") + ylab("Percentage of cohort")
 
-ggsave(filename=here::here("output", "plots","sex_count.jpg"),sex_plot,width = 30, height = 15, units = "cm")
+ggsave(filename=here::here("output", "plots","sex_count.tiff"),sex_plot,dpi=600,width = 30, height = 15, units = "cm")
 
 
 sex_plot_eng<-sex %>% 
@@ -167,7 +167,7 @@ sex_plot_eng<-sex %>%
   theme(axis.text.x = element_text(size=20,angle = 90,hjust=0.95,vjust=0.2)) + 
   xlab("") + ylab("Percentage of cohort")
 
-ggsave(filename=here::here("output", "plots","sex_count_eng.jpg"),sex_plot_eng,width = 30, height = 20, units = "cm")
+ggsave(filename=here::here("output", "plots","sex_count_eng.tiff"),sex_plot_eng,dpi=600,width = 30, height = 20, units = "cm")
 
 ############### ethnicity
 ethnicity<-read_csv(here::here("output", "tables","ethnic_group.csv"))
@@ -183,7 +183,7 @@ ethnicity_plot<-ethnicity %>%
   coord_flip() + 
   xlab("") + ylab("Percentage of all ethnicities")
 
-ggsave(filename=here::here("output", "plots","ethnicity_count.jpg"),ethnicity_plot,width = 45, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity_count.tiff"),ethnicity_plot,dpi=600,width = 45, height = 30, units = "cm")
 
 ethnicity_plot_eng<-ethnicity %>%
   filter(region=="England",group=="5_2001") %>%
@@ -195,7 +195,7 @@ ethnicity_plot_eng<-ethnicity %>%
   coord_flip() + 
   xlab("") + ylab("Percentage of all ethnicities")
 
-ggsave(filename=here::here("output", "plots","ethnicity_count_eng.jpg"),ethnicity_plot_eng,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity_count_eng.tiff"),ethnicity_plot_eng,dpi=600,width = 30, height = 30, units = "cm")
 
 
 ethnicity_plot16<-ethnicity %>%
@@ -209,7 +209,7 @@ ethnicity_plot16<-ethnicity %>%
   coord_flip() + 
   xlab("") + ylab("Percentage of all ethnicities")
 
-ggsave(filename=here::here("output", "plots","ethnicity16_count.jpg"),ethnicity_plot16,width = 45, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity16_count.tiff"),ethnicity_plot16,dpi=600,width = 45, height = 30, units = "cm")
 
 ethnicity_plot16_eng<-ethnicity %>%
   filter(region=="England",group=="16_2001") %>%
@@ -221,7 +221,7 @@ ethnicity_plot16_eng<-ethnicity %>%
   coord_flip() + 
   xlab("") + ylab("Percentage of all ethnicities")
 
-ggsave(filename=here::here("output", "plots","ethnicity16_count_eng.jpg"),ethnicity_plot16_eng,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity16_count_eng.tiff"),ethnicity_plot16_eng,dpi=600,width = 30, height = 30, units = "cm")
 
 ####### NA removed
 
@@ -237,7 +237,7 @@ ethnicity_plot16_eng_na <-  ethnicity_na %>%
   coord_flip() + 
   xlab("") + ylab("Percentage of all ethnicities")
 
-ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_eng_na.jpg"),ethnicity_plot16_eng_na,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_eng_na.tiff"),ethnicity_plot16_eng_na,dpi=600,width = 30, height = 30, units = "cm")
 
 ethnicity_plot_na<-ethnicity_na %>%
   filter(region!="England",group=="5_2001") %>%
@@ -250,7 +250,7 @@ ethnicity_plot_na<-ethnicity_na %>%
   coord_flip() + 
   xlab("") + ylab("Percentage of all ethnicities")
 
-ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_na.jpg"),ethnicity_plot_na,width = 45, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_na.tiff"),ethnicity_plot_na,dpi=600,width = 45, height = 30, units = "cm")
 
 ethnicity_plot_eng_na<-ethnicity_na %>%
   filter(region=="England",group=="5_2001") %>%
@@ -262,7 +262,7 @@ ethnicity_plot_eng_na<-ethnicity_na %>%
   coord_flip() + 
   xlab("") + ylab("Percentage of all ethnicities") 
 
-ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_eng_na.jpg"),ethnicity_plot_eng_na,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity_count_eng_na.tiff"),ethnicity_plot_eng_na,dpi=600,width = 30, height = 30, units = "cm")
 
 
 ethnicity_plot16_na<-ethnicity_na %>%
@@ -277,18 +277,18 @@ ethnicity_plot16_na<-ethnicity_na %>%
   xlab("") + ylab("Percentage of all ethnicities") 
   
 
-ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_na.jpg"),ethnicity_plot16_na,width = 45, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","na_removed","ethnicity16_count_na.tiff"),ethnicity_plot16_na,dpi=600,width = 45, height = 30, units = "cm")
 
 ethnicity_5_16<-ggarrange(ethnicity_plot_eng_na, ethnicity_plot16_eng_na, 
           labels = c("A", "B"),
           ncol = 1, nrow = 2,
           common.legend=T)
 
-ggsave(filename=here::here("output", "plots","ethnicity_5_16_comb.jpg"),ethnicity_5_16,width = 30, height = 45, units = "cm")
+ggsave(filename=here::here("output", "plots","ethnicity_5_16_comb.tiff"),ethnicity_5_16,dpi=600,width = 30, height = 45, units = "cm")
 
 
 agesex_comb_plot<-ggarrange(age_plot_eng, age_sex_plot_eng, 
                           labels = c("A", "B"),
                           ncol = 1, nrow = 2)
 
-ggsave(filename=here::here("output", "plots","agesex_comb_plot.jpg"),agesex_comb_plot,width = 30, height = 45, units = "cm")
+ggsave(filename=here::here("output", "plots","agesex_comb_plot.tiff"),agesex_comb_plot,dpi=600,width = 30, height = 45, units = "cm")

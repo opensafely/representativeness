@@ -35,24 +35,24 @@ actions:
     needs: [counts]
     outputs:
       moderately_sensitive:
-        figure2: output/plots/imd_count.jpg
-        figure3: output/plots/age_sex_count.jpg
-        figure4: output/plots/age_count.jpg
-        figure5: output/plots/sex_count.jpg
-        figure7: output/plots/age_sex_count_eng.jpg
-        figure8: output/plots/age_count_eng.jpg
-        figure9: output/plots/sex_count_eng.jpg
-        figure10: output/plots/ethnicity_count_eng.jpg
-        figure11: output/plots/ethnicity_count.jpg
-        figure12: output/plots/ethnicity16_count_eng.jpg
-        figure13: output/plots/ethnicity16_count.jpg
-        figure14: output/plots/na_removed/imd_count_NA.jpg
-        figure15: output/plots/na_removed/ethnicity_count_na.jpg
-        figure16: output/plots/na_removed/ethnicity_count_eng_na.jpg
-        figure17: output/plots/na_removed/ethnicity16_count_eng_na.jpg
-        figure18: output/plots/na_removed/ethnicity16_count_na.jpg
-        figure19: output/plots/ethnicity_5_16_comb.jpg
-        figure20: output/plots/agesex_comb_plot.jpg
+        figure2: output/plots/imd_count.tiff
+        figure3: output/plots/age_sex_count.tiff
+        figure4: output/plots/age_count.tiff
+        figure5: output/plots/sex_count.tiff
+        figure7: output/plots/age_sex_count_eng.tiff
+        figure8: output/plots/age_count_eng.tiff
+        figure9: output/plots/sex_count_eng.tiff
+        figure10: output/plots/ethnicity_count_eng.tiff
+        figure11: output/plots/ethnicity_count.tiff
+        figure12: output/plots/ethnicity16_count_eng.tiff
+        figure13: output/plots/ethnicity16_count.tiff
+        figure14: output/plots/na_removed/imd_count_NA.tiff
+        figure15: output/plots/na_removed/ethnicity_count_na.tiff
+        figure16: output/plots/na_removed/ethnicity_count_eng_na.tiff
+        figure17: output/plots/na_removed/ethnicity16_count_eng_na.tiff
+        figure18: output/plots/na_removed/ethnicity16_count_na.tiff
+        figure19: output/plots/ethnicity_5_16_comb.tiff
+        figure20: output/plots/agesex_comb_plot.tiff
         
 
   calculate_tpp_coverage:
@@ -61,7 +61,7 @@ actions:
     outputs:
       moderately_sensitive:
         region_table: output/tables/tpp_pop_all.csv
-        region_map: output/plots/tpp_coverage_map.jpg
+        region_map: output/plots/tpp_coverage_map.tiff
 
   counts_deaths:
     run: r:latest analysis/death_counts.R
@@ -75,5 +75,5 @@ actions:
     needs: [counts_deaths]
     outputs:
       moderately_sensitive:
-        figure1: output/plots/Cause_of_Death_count.jpg
-        figure6: output/plots/Cause_of_Death_count_eng.jpg
+        figure1: output/plots/Cause_of_Death_count.tiff
+        figure6: output/plots/Cause_of_Death_count_eng.tiff

@@ -32,7 +32,7 @@ death_plot<-death %>%
   xlab("") + ylab("Percentage of all deaths") +
   scale_x_discrete(limits = levels)
 
-ggsave(filename=here::here("output", "plots","Cause_of_Death_count.tiff"),death_plot,dpi=600,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","Cause_of_Death_count.tiff"),death_plot,dpi=600,width = 60, height = 30, units = "cm")
 
 death_plot_eng<-death %>%
   filter(region=="England") %>%

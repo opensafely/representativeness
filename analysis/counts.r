@@ -127,6 +127,11 @@ age<-  age_sex_tpp %>%
   ungroup %>%
   mutate(cohort="TPP") %>%
   bind_rows(age_ons_total) %>%
+  group_by(region,cohort) %>%
+  mutate(age_group =  factor(age_group, levels = agelevels)) %>%
+  arrange(age_group) %>%
+  mutate(cumPerc=round(cumsum(N)/Total *100,1)) %>%
+  ungroup %>%
   mutate(sex="Total",
          ## add rounding
          N=round(N/5)*5,

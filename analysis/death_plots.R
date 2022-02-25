@@ -3,8 +3,8 @@
 #
 # Input:  output/tables/death_count.csv.gz
 #
-# output: output/plots/Cause_of_Death_count.tiff
-#         output/plots/Cause_of_Death_count_eng.tiff
+# output: output/plots/Cause_of_Death_count.png
+#         output/plots/Cause_of_Death_count_eng.png
 #
 # Author: Colm D Andrews
 # Date:   26/11/2021
@@ -32,7 +32,7 @@ death_plot<-death %>%
   xlab("") + ylab("Percentage of all deaths") +
   scale_x_discrete(limits = levels)
 
-ggsave(filename=here::here("output", "plots","Cause_of_Death_count.tiff"),death_plot,dpi=600,width = 60, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","Cause_of_Death_count.png"),death_plot,dpi=600,width = 60, height = 30, units = "cm")
 
 death_plot_eng<-death %>%
   filter(region=="England") %>%
@@ -44,4 +44,4 @@ death_plot_eng<-death %>%
   ylab("Percentage of all deaths") + 
   scale_x_discrete(limits = levels)
 
-ggsave(filename=here::here("output", "plots","Cause_of_Death_count_eng.tiff"),death_plot_eng,dpi=600,width = 30, height = 30, units = "cm")
+ggsave(filename=here::here("output", "plots","Cause_of_Death_count_eng.png"),death_plot_eng,dpi=600,width = 30, height = 30, units = "cm")

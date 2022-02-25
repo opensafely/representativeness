@@ -1,10 +1,9 @@
-version: '3.0'
+version: "3.0"
 
 expectations:
   population_size: 10000
 
 actions:
-
   generate_cohort:
     run: cohortextractor:latest generate_cohort --study-definition study_definition --output-dir=output/cohorts --output-format=csv.gz
     outputs:
@@ -29,31 +28,31 @@ actions:
         ethnicity_table: output/tables/ethnic_group.csv
         ethnicity_table_NA: output/tables/ethnic_group_NA.csv
 
-
   plots:
     run: r:latest analysis/plots.R
     needs: [counts]
     outputs:
       moderately_sensitive:
-        figure2: output/plots/imd_count.tiff
-        figure3: output/plots/age_sex_count.tiff
-        figure4: output/plots/age_count.tiff
-        figure5: output/plots/sex_count.tiff
-        figure7: output/plots/age_sex_count_eng.tiff
-        figure8: output/plots/age_count_eng.tiff
-        figure9: output/plots/sex_count_eng.tiff
-        figure10: output/plots/ethnicity_count_eng.tiff
-        figure11: output/plots/ethnicity_count.tiff
-        figure12: output/plots/ethnicity16_count_eng.tiff
-        figure13: output/plots/ethnicity16_count.tiff
-        figure14: output/plots/na_removed/imd_count_NA.tiff
-        figure15: output/plots/na_removed/ethnicity_count_na.tiff
-        figure16: output/plots/na_removed/ethnicity_count_eng_na.tiff
-        figure17: output/plots/na_removed/ethnicity16_count_eng_na.tiff
-        figure18: output/plots/na_removed/ethnicity16_count_na.tiff
-        figure19: output/plots/ethnicity_5_16_comb.tiff
-        figure20: output/plots/agesex_comb_plot.tiff
-        
+        figure2: output/plots/imd_count.png
+        figure3: output/plots/age_sex_count.png
+        figure4: output/plots/age_count.png
+        figure5: output/plots/sex_count.png
+        figure7: output/plots/age_sex_count_eng.png
+        figure8: output/plots/age_count_eng.png
+        figure9: output/plots/sex_count_eng.png
+        figure10: output/plots/ethnicity_count_eng.png
+        figure11: output/plots/ethnicity_count.png
+        figure12: output/plots/ethnicity16_count_eng.png
+        figure13: output/plots/ethnicity16_count.png
+        figure14: output/plots/na_removed/imd_count_NA.png
+        figure15: output/plots/na_removed/ethnicity_count_na.png
+        figure16: output/plots/na_removed/ethnicity_count_eng_na.png
+        figure17: output/plots/na_removed/ethnicity16_count_eng_na.png
+        figure18: output/plots/na_removed/ethnicity16_count_na.png
+        figure19: output/plots/ethnicity_5_16_comb.png
+        figure20: output/plots/agesex_comb_plot.png
+        figure21: output/plots/age_cum_plot_eng.png
+        figure22: output/plots/age_cum_plot.png
 
   calculate_tpp_coverage:
     run: r:latest analysis/calculate_tpp_coverage.R
@@ -61,7 +60,7 @@ actions:
     outputs:
       moderately_sensitive:
         region_table: output/tables/tpp_pop_all.csv
-        region_map: output/plots/tpp_coverage_map.tiff
+        region_map: output/plots/tpp_coverage_map.png
 
   counts_deaths:
     run: r:latest analysis/death_counts.R
@@ -75,5 +74,5 @@ actions:
     needs: [counts_deaths]
     outputs:
       moderately_sensitive:
-        figure1: output/plots/Cause_of_Death_count.tiff
-        figure6: output/plots/Cause_of_Death_count_eng.tiff
+        figure1: output/plots/Cause_of_Death_count.png
+        figure6: output/plots/Cause_of_Death_count_eng.png

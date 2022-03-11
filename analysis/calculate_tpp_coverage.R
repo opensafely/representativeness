@@ -17,7 +17,6 @@ time_total <- Sys.time()
 ################################################################################
 
 library(tidyverse)
-library(lubridate)
 library(ggplot2)
 library(sf)
 library(data.table)

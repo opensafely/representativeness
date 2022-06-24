@@ -506,6 +506,54 @@ ggsave(
   units = "cm"
 )
 
+ethnicity_plot16_nw <- ethnicity %>%
+  filter(region != "England",Ethnic_Group!="White British", group == "16_2001") %>%
+  ggplot(aes(x = Ethnic_Group, y = percentage, fill = cohort)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap( ~ region) +
+  theme_classic() +
+  theme(text = element_text(size = 20)) +
+  theme(axis.text.x = element_text(
+    size = 20,
+    hjust = 0,
+    vjust = 0
+  )) +
+  coord_flip() +
+  xlab("") + ylab("Percentage of all ethnicities")
+
+ggsave(
+  filename = here::here("output", "plots", "ethnicity16_count_nw.png"),
+  ethnicity_plot16_nw,
+  dpi = 600,
+  width = 45,
+  height = 30,
+  units = "cm"
+)
+
+ethnicity_plot16_eng_nw <- ethnicity %>%
+  filter(region == "England",Ethnic_Group!="White British", group == "16_2001") %>%
+  ggplot(aes(x = Ethnic_Group, y = percentage, fill = cohort)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_classic() +
+  theme(text = element_text(size = 20)) +
+  theme(axis.text.x = element_text(
+    size = 20,
+    hjust = 0,
+    vjust = 0
+  )) +
+  coord_flip() +
+  xlab("") + ylab("Percentage of all ethnicities")
+
+ggsave(
+  filename = here::here("output", "plots", "ethnicity16_count_eng_nw.png"),
+  ethnicity_plot16_eng_nw,
+  dpi = 600,
+  width = 30,
+  height = 30,
+  units = "cm"
+)
+
+
 ####### NA removed
 
 ethnicity_na <-

@@ -55,6 +55,8 @@ actions:
         figure22: output/plots/age_cum_plot.png
         figure23: output/plots/ethnicity_count_eng_nw.png
         figure24: output/plots/ethnicity_count_nw.png
+        figure25: output/plots/ethnicity16_count_eng_nw.png
+        figure26: output/plots/ethnicity16_count_nw.png
 
   calculate_tpp_coverage:
     run: r:latest analysis/calculate_tpp_coverage.R

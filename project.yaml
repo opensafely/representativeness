@@ -86,4 +86,4 @@ actions:
     needs: [generate_cohort]
     outputs:
       moderately_sensitive:
-        imd_table: output/tables/immortal.csv
+        immmortal_table: output/tables/immortal.csv

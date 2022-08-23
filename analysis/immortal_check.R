@@ -1,4 +1,5 @@
 library('tidyverse')
+fs::dir_create(here::here("output", "tables"))
 
 ### Check for immortal patients
 df_input <- read_csv(here::here("output", "cohorts","input.csv.gz"))

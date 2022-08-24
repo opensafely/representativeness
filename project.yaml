@@ -87,3 +87,4 @@ actions:
     outputs:
       moderately_sensitive:
         immmortal_table: output/tables/immortal.csv
+        immmortal_table: output/tables/immort_rounded.csv
